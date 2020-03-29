@@ -1,0 +1,559 @@
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/images/favicon.svg">
+    
+    <link rel="stylesheet" href="/scss/global.min.cc2decf9a377d0295f586f0965eb58a37bfacb6fc8780a8e356d6d97e005f264.css">
+    
+    <link rel="stylesheet" href="/css/prism.css" />
+    <link href="https://fonts.googleapis.com/css?family=Merriweather&display=swap" rel="stylesheet">
+    
+
+ 
+
+
+
+
+
+
+	
+
+
+
+
+<title>「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く | y1ban.com</title>
+<meta name="description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
+ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
+コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
+大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
+#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+<meta property="og:title" content="「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く | y1ban.com">
+<meta property="og:site_name" content="y1ban.com">
+<meta property="og:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
+ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
+コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
+大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
+#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+<meta property="og:url" content="https://y1ban.com/saizeriya-problem-in-clp-fd/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content='https://y1ban.com/saizeriya-problem-in-clp-fd/saizeriya.jpg'><meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く | y1ban.com">
+
+	<link rel="canonical" href="https://y1ban.com/saizeriya-problem-in-clp-fd/">
+
+
+	<meta name="twitter:site" content="@https://twitter.com/1ban">
+	<meta name="twitter:creator" content="@https://twitter.com/1ban">
+
+	<meta name="twitter:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
+ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
+コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
+大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
+#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+<meta name="twitter:image" content="https://y1ban.com/saizeriya-problem-in-clp-fd/saizeriya.jpg">
+<meta property="article:published_time" content="2020-01-29T00:00:00&#43;00:00">
+	<meta property="article:updated_time" content="2020-01-29T00:00:00&#43;00:00">
+
+
+
+    </head>
+
+
+<body class="line-numbers">
+
+    
+    <script src="/js/initColors.js"></script>
+
+    <div class="layout-styled">
+
+        <Section class="section">
+  <div class="nav-container">
+    <a class="logo-link" href="/">
+      <h1>y1ban.com</h1>
+<div id="logo-mobile"></div>
+<div id="logo-desktop"></div>
+
+      <span class="header-hidden">Navigate back to the homepage</span>
+    </a>
+    <div class="nav-controls">
+      <button id="copyButton" class="icon-wrapper">
+        <svg
+    class="icon-image"
+    width="24"
+    height="20"
+    viewBox="0 0 24 20"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    >
+    <path
+      fillRule="evenodd"
+      clipRule="evenodd"
+      d="M2 5C2 3.34328 3.34328 2 5 2H14C15.6567 2 17 3.34328 17 5V9C17 10.6567 15.6567 12 14 12H10C9.44771 12 9 12.4477 9 13C9 13.5523 9.44771 14 10 14H14C16.7613 14 19 11.7613 19 9V5C19 2.23872 16.7613 0 14 0H5C2.23872 0 0 2.23872 0 5V9C0 10.4938 0.656313 11.8361 1.6935 12.7509C2.10768 13.1163 2.73961 13.0767 3.10494 12.6625C3.47028 12.2483 3.43068 11.6164 3.0165 11.2511C2.39169 10.6999 2 9.89621 2 9V5ZM7 11C7 9.34328 8.34328 8 10 8H14C14.5523 8 15 7.55228 15 7C15 6.44772 14.5523 6 14 6H10C7.23872 6 5 8.23872 5 11V15C5 17.7613 7.23872 20 10 20H19C21.7613 20 24 17.7613 24 15V11C24 9.50621 23.3437 8.16393 22.3065 7.24906C21.8923 6.88372 21.2604 6.92332 20.8951 7.3375C20.5297 7.75168 20.5693 8.38361 20.9835 8.74894C21.6083 9.30007 22 10.1038 22 11V15C22 16.6567 20.6567 18 19 18H10C8.34328 18 7 16.6567 7 15V11Z"
+      fill="#000"
+    />
+</svg>
+        <div id="toolTip" class="tool-tip " >
+            copied
+        </div>
+        <input id="copyText" style="opacity: 0;" type="text" class="tool-tip " />
+      </button>
+
+      <button id="themeColorButton" class="icon-wrapper"> 
+        <div id="sunRays" class="sun-rays"></div>
+        <div id="moonOrSun" class="moon-or-sun"></div>
+        <div id="moonMask" class="moon-mask"></div>
+      </button>
+    </div>
+</div>
+</Section>
+
+
+<script src="/js/toggleLogos.js"></script>
+
+
+<script src="/js/toggleColors.js"></script>
+
+
+<script src="/js/copyUrl.js"></script>
+
+        
+
+<section class="section narrow">
+
+    <section id="articleHero" class="section narrow">
+    <div class="article-hero">
+        <header class="article-header">
+            <h1 class="article-hero-heading">「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く</h1>
+            <div class="article-hero-subtitle">
+                <div class="article-meta">
+                    
+
+
+    
+            <a href="/authors/yutaka-ichibangase/" class="article-author-link">
+                
+                    <div class="article-author-avatar">
+                        <img src="/authors/yutaka-ichibangase/avatar.jpg" />
+                    </div>
+                
+                
+                <strong>Yutaka Ichibangase</strong>
+                
+                <span class="hide-on-mobile">,&nbsp;</span>
+            </a>
+    
+
+
+
+<script src="/js/collapseAuthors.js"></script>
+                    January 29, 2020
+                    • 5 min read
+                </div>
+            </div>
+        </header>
+        
+        <div class="article-hero-image" id="ArticleImage__Hero">
+            <img src="/saizeriya-problem-in-clp-fd/saizeriya.jpg">
+        </div>
+        
+    </div>
+</section>
+
+
+    <aside id="progressBar" class="aside-container">
+    <div class="aside-align">
+      <div>
+        <div class="overlap-container">
+        </div>
+      </div>
+    </div>
+
+    <div class="progress-container" tabIndex={-1}>
+        <div class="track-line" aria-hidden="true">
+            <div id="progressIndicator" class="progress-line"></div>
+        </div>
+    </div>
+</aside>
+
+
+    <article  id="articleContent" class="post-content" style="position:relative;">
+        <h1 id="はじめに">はじめに</h1>
+<p>「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは <a href="https://qiita.com/tanakh/items/a1fb13f78e0576415de3#%E5%95%8F%E9%A1%8C">「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」</a> という問題で、様々な解法が知られている:</p>
+<ul>
+<li><a href="https://qiita.com/hodaka0714/items/cf44b4ece992a39b5be4">「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。</a></li>
+<li><a href="https://qiita.com/tanakh/items/a1fb13f78e0576415de3">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。</a></li>
+<li><a href="https://qiita.com/YSRKEN/items/dfc8604eb8598e5e9076">「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。</a></li>
+<li><a href="https://qiita.com/kaityo256/items/b9a146d806dcb4f6edf9">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。</a></li>
+<li><a href="https://qiita.com/miki_iwa/items/5e0434da8b1150c21741">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。</a></li>
+<li><a href="https://www.waenavi.com/entry/20190519/1558269886">【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法</a></li>
+<li><a href="https://qiita.com/n_chiba_/items/694035ad880126230309">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。</a></li>
+<li><a href="https://anqou.net/poc/2019/05/27/post-2920/">「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた</a></li>
+<li><a href="https://primenumber.hatenadiary.jp/entry/2019/05/27/235459">「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた</a></li>
+<li><a href="https://qiita.com/ahinore@github/items/c9a71ac56055a94d9e54">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。</a></li>
+<li><a href="https://doratex.hatenablog.jp/entry/20190520/1558323856">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～</a></li>
+<li><a href="https://zrbabbler.hatenablog.com/entry/2019/05/25/162221">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた</a></li>
+</ul>
+<p>ここでは <a href="https://www.swi-prolog.org/">SWI-Prolog</a> の <a href="https://www.swi-prolog.org/pldoc/man?section=clpfd">CLP(FD)</a> を用いた制約論理プログラミングでの解法を紹介する</p>
+<h1 id="コード">コード</h1>
+<p>メニューのデータは <a href="https://qiita.com/marusho_summers/items/a2d3681fac863734ec8a">サイゼリヤ1000円ガチャをつくってみた(Heroku + Flask + LINEbot)</a> で紹介されている <a href="https://github.com/marushosummers/Saizeriya_1000yen/tree/%231">Saizeriya_100yenの#1ブランチ</a> からとった</p>
+<p>大きな流れは <a href="https://qiita.com/tanakh/items/a1fb13f78e0576415de3">「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。</a> と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-prolog" data-lang="prolog"><span style="color:#e6db74">#</span>!<span style="color:#f92672">/</span><span style="color:#e6db74">usr</span><span style="color:#f92672">/</span><span style="color:#e6db74">bin</span><span style="color:#f92672">/</span><span style="color:#e6db74">env</span> <span style="color:#a6e22e">swipl</span>
+
+<span style="color:#f92672">:-</span> <span style="color:#a6e22e">use_module</span>(<span style="color:#a6e22e">library</span>(<span style="color:#e6db74">clpfd</span>)).
+:- <span style="color:#a6e22e">initialization</span>(<span style="color:#e6db74">main</span>, <span style="color:#e6db74">main</span>).
+
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">:-</span> <span style="color:#a6e22e">time</span>(<span style="color:#e6db74">saizeriya</span>).
+
+<span style="color:#a6e22e">saizeriya</span> <span style="color:#f92672">:-</span>
+    <span style="color:#75715e">% 必要なカラムだけに絞り込む</span>
+    <span style="color:#a6e22e">findall</span>(<span style="color:#a6e22e">menu</span>(Name, Price, Calorie), <span style="color:#a6e22e">menu</span>(<span style="color:#66d9ef">_</span>, Name, <span style="color:#66d9ef">_</span>, <span style="color:#66d9ef">_</span>, Price, Calorie, <span style="color:#66d9ef">_</span>), Menus),
+
+    <span style="color:#75715e">% すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す</span>
+    <span style="color:#a6e22e">same_length</span>(Menus, Vars),
+    Vars <span style="color:#e6db74">ins</span> <span style="color:#ae81ff">0..1</span>,
+
+    <span style="color:#75715e">% 合計金額が1,000円を超えない</span>
+    <span style="color:#a6e22e">maplist</span>(<span style="color:#a6e22e">arg</span>(<span style="color:#ae81ff">2</span>), Menus, AllPrices),
+    <span style="color:#a6e22e">scalar_product</span>(AllPrices, Vars, <span style="color:#e6db74">#=&lt;</span>, <span style="color:#ae81ff">1000</span>),
+
+    <span style="color:#75715e">% 総カロリー</span>
+    <span style="color:#a6e22e">maplist</span>(<span style="color:#a6e22e">arg</span>(<span style="color:#ae81ff">3</span>), Menus, AllCalories),
+    <span style="color:#a6e22e">scalar_product</span>(AllCalories, Vars, <span style="color:#e6db74">#=</span>, Cal),
+
+    <span style="color:#75715e">% カロリーを最大化するんだという強い意志</span>
+    <span style="color:#a6e22e">labeling</span>([<span style="color:#a6e22e">max</span>(Cal)], Vars),
+
+    <span style="color:#a6e22e">print_result</span>(Menus, Vars).
+
+<span style="color:#a6e22e">print_result</span>([], []).
+<span style="color:#a6e22e">print_result</span>([<span style="color:#66d9ef">_</span>|Menus], [<span style="color:#ae81ff">0</span>|Vars]) :-
+    <span style="color:#a6e22e">print_result</span>(Menus, Vars).
+<span style="color:#a6e22e">print_result</span>([<span style="color:#a6e22e">menu</span>(Name, Price, Calorie)|Menus], [<span style="color:#ae81ff">1</span>|Vars]) :-
+    <span style="color:#a6e22e">format</span>(<span style="color:#e6db74">&#39;~w~n~t~w円~20|~t~wkcal~30|~n&#39;</span>, [Name, Price, Calorie]),
+    <span style="color:#a6e22e">print_result</span>(Menus, Vars).
+
+<span style="color:#75715e">% https://github.com/marushosummers/Saizeriya_1000yen/tree/%231</span>
+<span style="color:#75715e">% menu(id integer, name text, category text, type text, price integer, calorie integer, salt real)</span>
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#39;彩りガーデンサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">130</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#39;小エビのサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">349</span>, <span style="color:#ae81ff">115</span>, <span style="color:#ae81ff">1.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#39;やわらかチキンのサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">134</span>, <span style="color:#ae81ff">1.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#39;わかめサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">92</span>, <span style="color:#ae81ff">2.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">5</span>, <span style="color:#e6db74">&#39;イタリアンサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">196</span>, <span style="color:#ae81ff">0.7</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">6</span>, <span style="color:#e6db74">&#39;シーフードサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">229</span>, <span style="color:#ae81ff">2.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">7</span>, <span style="color:#e6db74">&#39;半熟卵とポークのサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">salad</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">433</span>, <span style="color:#ae81ff">2.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">8</span>, <span style="color:#e6db74">&#39;コーンクリームスープ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">soup</span>, <span style="color:#ae81ff">149</span>, <span style="color:#ae81ff">142</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">9</span>, <span style="color:#e6db74">&#39;冷たいパンプキンスープ(季節限定)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">soup</span>, <span style="color:#ae81ff">149</span>, <span style="color:#ae81ff">105</span>, <span style="color:#ae81ff">0.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">10</span>, <span style="color:#e6db74">&#39;たっぷり野菜のミネストローネ(季節限定)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">soup</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">222</span>, <span style="color:#ae81ff">2.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">11</span>, <span style="color:#e6db74">&#39;削りたてペコリーノチーズ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">59</span>, <span style="color:#ae81ff">0.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">12</span>, <span style="color:#e6db74">&#39;ミニフィセル&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">169</span>, <span style="color:#ae81ff">188</span>, <span style="color:#ae81ff">1.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">13</span>, <span style="color:#e6db74">&#39;ガーリックトースト&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">189</span>, <span style="color:#ae81ff">252</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">14</span>, <span style="color:#e6db74">&#39;セットドリンクバー&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">drinkbar</span>, <span style="color:#ae81ff">190</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">15</span>, <span style="color:#e6db74">&#39;辛味チキン&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">374</span>, <span style="color:#ae81ff">2.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">16</span>, <span style="color:#e6db74">&#39;アスパラガスのオーブン焼き(季節限定)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">221</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">17</span>, <span style="color:#e6db74">&#39;ポップコーンシュリンプ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">215</span>, <span style="color:#ae81ff">1.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">18</span>, <span style="color:#e6db74">&#39;エスカルゴのオーブン焼き&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">19</span>, <span style="color:#e6db74">&#39;ムール貝のガーリック焼き&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">164</span>, <span style="color:#ae81ff">1.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">20</span>, <span style="color:#e6db74">&#39;野菜ソースのグリルソーセージ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">570</span>, <span style="color:#ae81ff">3.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">21</span>, <span style="color:#e6db74">&#39;チョリソー&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">393</span>, <span style="color:#ae81ff">2.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">22</span>, <span style="color:#e6db74">&#39;柔らか青豆の温サラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">213</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">23</span>, <span style="color:#e6db74">&#39;ほうれん草のソテー&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">138</span>, <span style="color:#ae81ff">1.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">24</span>, <span style="color:#e6db74">&#39;キャベツとアンチョビのソテー&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">80</span>, <span style="color:#ae81ff">1.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">25</span>, <span style="color:#e6db74">&#39;ポテトのグリル&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">366</span>, <span style="color:#ae81ff">2.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">26</span>, <span style="color:#e6db74">&#39;セロリのピクルス(季節限定)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">52</span>, <span style="color:#ae81ff">1.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">27</span>, <span style="color:#e6db74">&#39;真イカのパプリカソース&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">138</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">28</span>, <span style="color:#e6db74">&#39;フォッカチオ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">119</span>, <span style="color:#ae81ff">214</span>, <span style="color:#ae81ff">0.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">29</span>, <span style="color:#e6db74">&#39;プチフォッカ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">139</span>, <span style="color:#ae81ff">214</span>, <span style="color:#ae81ff">0.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">30</span>, <span style="color:#e6db74">&#39;セットプチフォッカ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">79</span>, <span style="color:#ae81ff">107</span>, <span style="color:#ae81ff">0.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">31</span>, <span style="color:#e6db74">&#39;グラスワイン&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">32</span>, <span style="color:#e6db74">&#39;デカンタ・250ml&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">200</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">33</span>, <span style="color:#e6db74">&#39;デカンタ・500ml&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">34</span>, <span style="color:#e6db74">&#39;キリン一番搾り（ジョッキ）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">35</span>, <span style="color:#e6db74">&#39;キリン一番搾り（グラス）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">36</span>, <span style="color:#e6db74">&#39;ストロングゼロダブルレモン&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">379</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">37</span>, <span style="color:#e6db74">&#39;マグナム・1500ml&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">1080</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">38</span>, <span style="color:#e6db74">&#39;グラッパ&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">379</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">39</span>, <span style="color:#e6db74">&#39;ランブルスコセッコ（赤）辛口&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">1080</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">40</span>, <span style="color:#e6db74">&#39;ランブルスコ（ロゼ）甘口&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">1080</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">41</span>, <span style="color:#e6db74">&#39;ベルデッキオ（辛口・中）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">1080</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">42</span>, <span style="color:#e6db74">&#39;キャンティ（辛口・やや重い）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">1080</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">43</span>, <span style="color:#e6db74">&#39;キャンティルフィナリゼルパ（辛口・重い）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">2160</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">44</span>, <span style="color:#e6db74">&#39;サイゼリヤプレミアム（辛口・重い）&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">2160</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">45</span>, <span style="color:#e6db74">&#39;サントリーオールフリー&#39;</span>, <span style="color:#e6db74">drink</span>, <span style="color:#e6db74">alcohol</span>, <span style="color:#ae81ff">259</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">46</span>, <span style="color:#e6db74">&#39;フレッシュチーズとトマトのサラダ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">203</span>, <span style="color:#ae81ff">0.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">47</span>, <span style="color:#e6db74">&#39;フレッシュチーズとトマトのサラダ(Wサイズ)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">598</span>, <span style="color:#ae81ff">406</span>, <span style="color:#ae81ff">0.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">48</span>, <span style="color:#e6db74">&#39;プロシュート&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">162</span>, <span style="color:#ae81ff">1.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">49</span>, <span style="color:#e6db74">&#39;プロシュート(Wサイズ)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">798</span>, <span style="color:#ae81ff">324</span>, <span style="color:#ae81ff">3.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">50</span>, <span style="color:#e6db74">&#39;熟成ミラノサラミ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">95</span>, <span style="color:#ae81ff">1.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">51</span>, <span style="color:#e6db74">&#39;熟成ミラノサラミ(Wサイズ)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">598</span>, <span style="color:#ae81ff">190</span>, <span style="color:#ae81ff">2.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">52</span>, <span style="color:#e6db74">&#39;マルゲリータピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">568</span>, <span style="color:#ae81ff">2.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">53</span>, <span style="color:#e6db74">&#39;パンチェッタのピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">646</span>, <span style="color:#ae81ff">2.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">54</span>, <span style="color:#e6db74">&#39;野菜ときのこのピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">610</span>, <span style="color:#ae81ff">2.7</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">55</span>, <span style="color:#e6db74">&#39;やわらかイカのアンチョビのピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">593</span>, <span style="color:#ae81ff">4.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">56</span>, <span style="color:#e6db74">&#39;バッファローモッツァレラのピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">575</span>, <span style="color:#ae81ff">2.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">57</span>, <span style="color:#e6db74">&#39;ミラノサラミのピザ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pizza</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">606</span>, <span style="color:#ae81ff">3.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">58</span>, <span style="color:#e6db74">&#39;ほうれん草のグラタン(季節限定)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">gratin</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">521</span>, <span style="color:#ae81ff">1.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">59</span>, <span style="color:#e6db74">&#39;シーフードグラタン&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">gratin</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">537</span>, <span style="color:#ae81ff">2.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">60</span>, <span style="color:#e6db74">&#39;アラビアータ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">591</span>, <span style="color:#ae81ff">4.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">61</span>, <span style="color:#e6db74">&#39;ミートソースボロニア風&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">582</span>, <span style="color:#ae81ff">4.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">62</span>, <span style="color:#e6db74">&#39;半熟卵のミートソースボロニア風&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">468</span>, <span style="color:#ae81ff">672</span>, <span style="color:#ae81ff">4.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">63</span>, <span style="color:#e6db74">&#39;アーリオ・オーリオ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">560</span>, <span style="color:#ae81ff">3.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">64</span>, <span style="color:#e6db74">&#39;キャベツのペペロンチーノ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">686</span>, <span style="color:#ae81ff">3.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">65</span>, <span style="color:#e6db74">&#39;タラコソースシシリー風&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">605</span>, <span style="color:#ae81ff">3.7</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">66</span>, <span style="color:#e6db74">&#39;スープ入りトマト味ボンゴレ(季節限定)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">686</span>, <span style="color:#ae81ff">4.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">67</span>, <span style="color:#e6db74">&#39;パルマ風スパゲッティ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">700</span>, <span style="color:#ae81ff">4.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">68</span>, <span style="color:#e6db74">&#39;イカの墨入りスパゲッティ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">610</span>, <span style="color:#ae81ff">3.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">69</span>, <span style="color:#e6db74">&#39;カルボナーラ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">865</span>, <span style="color:#ae81ff">4.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">70</span>, <span style="color:#e6db74">&#39;アスパラガスとエビのクリームスパゲッティ(季節限定)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">711</span>, <span style="color:#ae81ff">3.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">71</span>, <span style="color:#e6db74">&#39;アラビアータ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">770</span>, <span style="color:#ae81ff">1182</span>, <span style="color:#ae81ff">8.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">72</span>, <span style="color:#e6db74">&#39;ミートソースボロニア風(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">770</span>, <span style="color:#ae81ff">1164</span>, <span style="color:#ae81ff">8.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">73</span>, <span style="color:#e6db74">&#39;アーリオ・オーリオ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">574</span>, <span style="color:#ae81ff">1120</span>, <span style="color:#ae81ff">6.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">74</span>, <span style="color:#e6db74">&#39;キャベツのペペロンチーノ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">770</span>, <span style="color:#ae81ff">1372</span>, <span style="color:#ae81ff">7.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">75</span>, <span style="color:#e6db74">&#39;タラコソースシシリー風(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">770</span>, <span style="color:#ae81ff">1210</span>, <span style="color:#ae81ff">7.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">76</span>, <span style="color:#e6db74">&#39;スープ入りトマト味ボンゴレ(季節限定)(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">976</span>, <span style="color:#ae81ff">1372</span>, <span style="color:#ae81ff">9.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">77</span>, <span style="color:#e6db74">&#39;パルマ風スパゲッティ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">770</span>, <span style="color:#ae81ff">1400</span>, <span style="color:#ae81ff">8.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">78</span>, <span style="color:#e6db74">&#39;イカの墨入りスパゲッティ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">976</span>, <span style="color:#ae81ff">1220</span>, <span style="color:#ae81ff">7.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">79</span>, <span style="color:#e6db74">&#39;カルボナーラ(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">976</span>, <span style="color:#ae81ff">1730</span>, <span style="color:#ae81ff">8.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">80</span>, <span style="color:#e6db74">&#39;アスパラガスとエビのクリームスパゲッティ(季節限定)(Wサイズ)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">pasta</span>, <span style="color:#ae81ff">976</span>, <span style="color:#ae81ff">1422</span>, <span style="color:#ae81ff">7.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">81</span>, <span style="color:#e6db74">&#39;トッピング半熟卵&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">appetizer</span>, <span style="color:#ae81ff">69</span>, <span style="color:#ae81ff">90</span>, <span style="color:#ae81ff">0.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">82</span>, <span style="color:#e6db74">&#39;ミラノ風ドリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">doria</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">542</span>, <span style="color:#ae81ff">2.7</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">83</span>, <span style="color:#e6db74">&#39;半熟卵のミラノ風ドリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">doria</span>, <span style="color:#ae81ff">368</span>, <span style="color:#ae81ff">632</span>, <span style="color:#ae81ff">2.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">84</span>, <span style="color:#e6db74">&#39;セットプチフォッカ付きミラノ風ドリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">doria</span>, <span style="color:#ae81ff">378</span>, <span style="color:#ae81ff">649</span>, <span style="color:#ae81ff">3.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">85</span>, <span style="color:#e6db74">&#39;いろどり野菜のミラノ風ドリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">doria</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">590</span>, <span style="color:#ae81ff">3.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">86</span>, <span style="color:#e6db74">&#39;エビとイカのドリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">doria</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">624</span>, <span style="color:#ae81ff">2.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">87</span>, <span style="color:#e6db74">&#39;シーフードパエリア&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">602</span>, <span style="color:#ae81ff">3.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">88</span>, <span style="color:#e6db74">&#39;エビと野菜のトマトクリームリゾット&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">302</span>, <span style="color:#ae81ff">2.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">89</span>, <span style="color:#e6db74">&#39;ハヤシ&amp;ターメリックライス&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">638</span>, <span style="color:#ae81ff">3.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">90</span>, <span style="color:#e6db74">&#39;半熟卵のハヤシ＆ターメリックライス&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">568</span>, <span style="color:#ae81ff">728</span>, <span style="color:#ae81ff">3.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">91</span>, <span style="color:#e6db74">&#39;ミックスグリル&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">823</span>, <span style="color:#ae81ff">3.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">92</span>, <span style="color:#e6db74">&#39;ハンバーグステーキ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">514</span>, <span style="color:#ae81ff">2.3</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">93</span>, <span style="color:#e6db74">&#39;デミグラスソースのハンバーグ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">628</span>, <span style="color:#ae81ff">3.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">94</span>, <span style="color:#e6db74">&#39;野菜ソースのハンバーグ(ディアボラ風)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">585</span>, <span style="color:#ae81ff">2.6</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">95</span>, <span style="color:#e6db74">&#39;イタリアンハンバーグ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">633</span>, <span style="color:#ae81ff">2.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">96</span>, <span style="color:#e6db74">&#39;焼肉とハンバーグの盛合せ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">hamburg</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">709</span>, <span style="color:#ae81ff">3.4</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">97</span>, <span style="color:#e6db74">&#39;若鶏のグリル(ディアボラ風)&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">chicken</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">541</span>, <span style="color:#ae81ff">2.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">98</span>, <span style="color:#e6db74">&#39;柔らかチキンのチーズ焼き&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">chicken</span>, <span style="color:#ae81ff">499</span>, <span style="color:#ae81ff">588</span>, <span style="color:#ae81ff">2.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">99</span>, <span style="color:#e6db74">&#39;パンチェッタと若鶏のグリル&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">chicken</span>, <span style="color:#ae81ff">599</span>, <span style="color:#ae81ff">663</span>, <span style="color:#ae81ff">2.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">100</span>, <span style="color:#e6db74">&#39;リブステーキ&#39;</span>, <span style="color:#e6db74">meal</span>, <span style="color:#e6db74">steak</span>, <span style="color:#ae81ff">999</span>, <span style="color:#ae81ff">621</span>, <span style="color:#ae81ff">1.5</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">101</span>, <span style="color:#e6db74">&#39;ライス&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">169</span>, <span style="color:#ae81ff">303</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">102</span>, <span style="color:#e6db74">&#39;ラージライス&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">219</span>, <span style="color:#ae81ff">454</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">103</span>, <span style="color:#e6db74">&#39;スモールライス&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">rice</span>, <span style="color:#ae81ff">119</span>, <span style="color:#ae81ff">151</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">104</span>, <span style="color:#e6db74">&#39;カプチーノ(アイスケーキ)(季節限定)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">114</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">105</span>, <span style="color:#e6db74">&#39;ティラミス(アイスケーキ)&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">131</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">106</span>, <span style="color:#e6db74">&#39;シナモンフォッカチオ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">169</span>, <span style="color:#ae81ff">246</span>, <span style="color:#ae81ff">0.8</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">107</span>, <span style="color:#e6db74">&#39;プリンとカプチーノの盛合せ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">330</span>, <span style="color:#ae81ff">0.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">108</span>, <span style="color:#e6db74">&#39;プリンとティラミスの盛合せ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">399</span>, <span style="color:#ae81ff">347</span>, <span style="color:#ae81ff">0.2</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">109</span>, <span style="color:#e6db74">&#39;ミルクアイスのせシナモンフォッカチオ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">319</span>, <span style="color:#ae81ff">346</span>, <span style="color:#ae81ff">0.9</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">110</span>, <span style="color:#e6db74">&#39;ミルクジェラート&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">111</span>, <span style="color:#e6db74">&#39;シチリア産レモンのソルベ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">199</span>, <span style="color:#ae81ff">127</span>, <span style="color:#ae81ff">0.0</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">112</span>, <span style="color:#e6db74">&#39;イタリアンプリン&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">249</span>, <span style="color:#ae81ff">216</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">113</span>, <span style="color:#e6db74">&#39;チョコレートケーキ&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">166</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">114</span>, <span style="color:#e6db74">&#39;コーヒーゼリー&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">299</span>, <span style="color:#ae81ff">162</span>, <span style="color:#ae81ff">0.1</span>).
+<span style="color:#a6e22e">menu</span>(<span style="color:#ae81ff">115</span>, <span style="color:#e6db74">&#39;トリフアイスクリーム&#39;</span>, <span style="color:#e6db74">sidedish</span>, <span style="color:#e6db74">dessert</span>, <span style="color:#ae81ff">369</span>, <span style="color:#ae81ff">164</span>, <span style="color:#ae81ff">0.1</span>).
+</code></pre></div><h1 id="実行結果">実行結果</h1>
+<p>上記のコードを <code>saizeriya_1000yen.pl</code> として保存し、 <code>$ chmod +x saizeriya_1000yen.pl</code> などで実行権限を付与しておく。 <code>$ ./saizeriya_1000yen.pl</code> で実行され、しばらくした後、最もカロリーが高い1,000円以下の組み合わせが出力される</p>
+<pre><code class="language-console" data-lang="console">$ ./saizeriya_1000yen.pl 
+ポテトのグリル
+                199円   366kcal
+アーリオ・オーリオ(Wサイズ)
+                574円  1120kcal
+ラージライス
+                219円   454kcal
+% 2,117,842,889 inferences, 417.754 CPU in 419.840 seconds (100% CPU, 5069588 Lips)
+</code></pre><h1 id="おわりに">おわりに</h1>
+<p>SWI-PrologのCLP(FD)を用いたサイゼリヤ問題の解法を紹介した</p>
+<p>最近業務でCLP(FD)を使う機会があり、なかなか便利で楽しかったので他のことにも使えないかと思っていたところ、サイゼリヤ問題を思い出したのでやってみた</p>
+
+    </article>
+
+
+    
+
+
+
+
+
+    
+    
+    
+        
+    
+
+
+
+
+<section id="articleNext" class="section nartrow">
+    <h3 class="footer-next-heading">More articles from y1ban.com</h3>
+    <div class="footer-spacer"></div>
+    <div class="next-articles-grid" numberOfArticles={numberOfArticles}>
+        <div class="post-row">
+            
+                <a href="/avoid-external-function-calls/" class="article-link"
+                 id="article-link-bigger">
+                    <div>
+                        <div class="image-container">
+                            <img src="/avoid-external-function-calls/leone-venter-mTkXSSScrzw-unsplash.jpg" class="article-image" />
+                        </div>
+                        <div>
+                            <h2 class="article-title">
+                                Goで別パッケージの関数呼び出しは禁止すべき
+                            </h2>
+                            <p class="article-excerpt">
+                                
+                            </p>
+                            <div class="article-metadata">
+                                December 12, 2019 · 2 min read
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            
+                <a href="/dont-forget-t-helper/" class="article-link"
+                >
+                    <div>
+                        <div class="image-container">
+                            <img src="/dont-forget-t-helper/fabrizio-frigeni-vHLj6G8xLhU-unsplash.jpg" class="article-image" />
+                        </div>
+                        <div>
+                            <h2 class="article-title">
+                                Goのテストでヘルパー関数に t.Helper() を忘れない
+                            </h2>
+                            <p class="article-excerpt">
+                                
+                            </p>
+                            <div class="article-metadata">
+                                December 12, 2019 · 2 min read
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            
+        </div>
+    </div>
+</section>
+
+</section>
+
+
+ <script src="/js/progressBar.js"></script>
+
+        
+        <div class="footer-gradient"></div>
+    <div class="section narrow">
+      <div class="footer-hr"></div>
+      <div class="footer-container">
+        <div class="footer-text">
+          © 2020 y1ban.com
+        </div>
+        <div class="social-icon-outer">
+    <div class="social-icon-container">
+        
+            
+                
+                <a href="https://github.com/ichiban"><svg
+class="social-icon-image"
+width="14"
+height="14"
+viewBox="0 0 14 14"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M7 0C3.1325 0 0 3.21173 0 7.17706C0 10.3529 2.00375 13.0353 4.78625 13.9863C5.13625 14.0491 5.2675 13.8338 5.2675 13.6454C5.2675 13.4749 5.25875 12.9097 5.25875 12.3087C3.5 12.6406 3.045 11.8691 2.905 11.4653C2.82625 11.259 2.485 10.622 2.1875 10.4516C1.9425 10.317 1.5925 9.98508 2.17875 9.97611C2.73 9.96714 3.12375 10.4964 3.255 10.7118C3.885 11.7973 4.89125 11.4923 5.29375 11.3039C5.355 10.8374 5.53875 10.5234 5.74 10.3439C4.1825 10.1645 2.555 9.54549 2.555 6.80026C2.555 6.01976 2.82625 5.37382 3.2725 4.87143C3.2025 4.692 2.9575 3.95635 3.3425 2.96951C3.3425 2.96951 3.92875 2.78111 5.2675 3.70516C5.8275 3.54367 6.4225 3.46293 7.0175 3.46293C7.6125 3.46293 8.2075 3.54367 8.7675 3.70516C10.1063 2.77214 10.6925 2.96951 10.6925 2.96951C11.0775 3.95635 10.8325 4.692 10.7625 4.87143C11.2087 5.37382 11.48 6.01079 11.48 6.80026C11.48 9.55446 9.84375 10.1645 8.28625 10.3439C8.54 10.5682 8.75875 10.9988 8.75875 11.6717C8.75875 12.6316 8.75 13.4032 8.75 13.6454C8.75 13.8338 8.88125 14.0581 9.23125 13.9863C11.9963 13.0353 14 10.3439 14 7.17706C14 3.21173 10.8675 0 7 0Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://github.com/ichiban</span>
+            
+        
+            
+                
+                <a href="https://www.instagram.com/ichibany/"><svg
+class="social-icon-image"
+width="13"
+height="13"
+viewBox="0 0 13 13"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M-3.05176e-05 3.97163C-3.05176e-05 1.77803 1.77824 -0.000244141 3.97184 -0.000244141H9.0281C11.2217 -0.000244141 13 1.77802 13 3.97163V9.02788C13 11.2215 11.2217 12.9998 9.0281 12.9998H3.97184C1.77824 12.9998 -3.05176e-05 11.2215 -3.05176e-05 9.02789V3.97163ZM3.97184 1.281C2.48585 1.281 1.28122 2.48564 1.28122 3.97163V9.02789C1.28122 10.5139 2.48585 11.7185 3.97184 11.7185H9.0281C10.5141 11.7185 11.7187 10.5139 11.7187 9.02788V3.97163C11.7187 2.48564 10.5141 1.281 9.0281 1.281H3.97184Z"
+  fill="#73737D"
+/>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M3.07483 6.55115C3.07483 4.64454 4.61242 3.09253 6.51702 3.09253C8.42162 3.09253 9.95921 4.64454 9.95921 6.55115C9.95921 8.45776 8.42162 10.0098 6.51702 10.0098C4.61242 10.0098 3.07483 8.45776 3.07483 6.55115ZM6.51702 4.37378C5.32709 4.37378 4.35608 5.34508 4.35608 6.55115C4.35608 7.75722 5.32709 8.72853 6.51702 8.72853C7.70695 8.72853 8.67796 7.75722 8.67796 6.55115C8.67796 5.34508 7.70695 4.37378 6.51702 4.37378Z"
+  fill="#73737D"
+/>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M9.95062 3.87075C10.4035 3.87075 10.7706 3.50149 10.7706 3.04597C10.7706 2.59046 10.4035 2.22119 9.95062 2.22119C9.49776 2.22119 9.13065 2.59046 9.13065 3.04597C9.13065 3.50149 9.49776 3.87075 9.95062 3.87075Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://www.instagram.com/ichibany/</span>
+            
+        
+            
+                
+                <a href="https://www.linkedin.com/in/yutakaichibangase/"><svg
+class="social-icon-image"
+width="14"
+height="14"
+viewBox="0 0 14 14"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+{...props}
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M3.59615 13.125H0.871552V4.36523H3.59615V13.125ZM2.24847 3.16406C1.81878 3.16406 1.44769 3.00781 1.13519 2.69531C0.822692 2.38281 0.666443 2.01171 0.666443 1.58203C0.666443 1.15234 0.822692 0.781248 1.13519 0.468749C1.44769 0.156249 1.81878 0 2.24847 0C2.67816 0 3.04925 0.156249 3.36175 0.468749C3.67425 0.781248 3.8305 1.15234 3.8305 1.58203C3.8305 2.01171 3.67425 2.38281 3.36175 2.69531C3.04925 3.00781 2.67816 3.16406 2.24847 3.16406ZM13.7915 13.125H11.0669V8.84765C11.0669 8.14452 11.0083 7.63671 10.8911 7.32421C10.6763 6.79687 10.2563 6.5332 9.63134 6.5332C9.00634 6.5332 8.56689 6.76757 8.31298 7.23632C8.11767 7.58788 8.02001 8.10546 8.02001 8.78905V13.125H5.32471V4.36523H7.93212V5.5664H7.96142C8.15673 5.17578 8.46923 4.85351 8.89892 4.59961C9.36767 4.28711 9.91454 4.13086 10.5395 4.13086C11.8091 4.13086 12.6977 4.53125 13.2055 5.33203C13.5962 5.97656 13.7915 6.97265 13.7915 8.3203V13.125Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://www.linkedin.com/in/yutakaichibangase/</span>
+            
+        
+            
+                
+                <a href="https://twitter.com/1ban"><svg
+class="social-icon-image"
+width="16"
+height="13"
+viewBox="0 0 16 13"
+fill="none"
+xmlns="http://www.w3.org/2000/svg"
+{...props}
+>
+<path
+  fillRule="evenodd"
+  clipRule="evenodd"
+  d="M14.0658 2.34438C14.7013 1.96349 15.1892 1.3604 15.419 0.641811C14.8244 0.994439 14.1658 1.25056 13.4648 1.3886C12.9034 0.7905 12.1036 0.416748 11.2185 0.416748C9.51888 0.416748 8.14096 1.79461 8.14096 3.49411C8.14096 3.7353 8.16822 3.97019 8.22068 4.19542C5.66301 4.06708 3.39543 2.84191 1.8776 0.980064C1.6127 1.43458 1.46094 1.96322 1.46094 2.52719C1.46094 3.59485 2.00428 4.5368 2.83003 5.08865C2.32553 5.07268 1.85104 4.93425 1.43608 4.70376C1.43586 4.71659 1.43586 4.72949 1.43586 4.74244C1.43586 6.23349 2.49666 7.47732 3.90448 7.75999C3.64622 7.83033 3.37436 7.86792 3.09366 7.86792C2.89537 7.86792 2.70257 7.84866 2.51471 7.81272C2.90629 9.03537 4.0428 9.92509 5.38945 9.94994C4.33623 10.7753 3.00928 11.2673 1.56749 11.2673C1.31911 11.2673 1.07413 11.2528 0.833374 11.2243C2.19527 12.0975 3.81291 12.6069 5.55081 12.6069C11.2113 12.6069 14.3067 7.91763 14.3067 3.85096C14.3067 3.71753 14.3037 3.5848 14.2978 3.45285C14.899 3.01896 15.4208 2.47694 15.8334 1.8598C15.2815 2.10456 14.6884 2.26998 14.0658 2.34438Z"
+  fill="#73737D"
+/>
+</svg></a>
+                <span class="hidden">https://twitter.com/1ban</span>
+            
+        
+    </div>
+</div>
+    </div>
+</div>
+
+    </div>
+
+    
+    <script src="/js/prism.js"></script>
+</body>
+
+</html>
