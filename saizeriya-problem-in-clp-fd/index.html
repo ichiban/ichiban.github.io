@@ -25,18 +25,10 @@
 
 
 <title>「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く | y1ban.com</title>
-<meta name="description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
- 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
-コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
-大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
-#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+<meta name="description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以">
 <meta property="og:title" content="「サイゼリヤで1000円あれば最大何kcal摂れるのか」を制約論理プログラミングで解く | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
- 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
-コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
-大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
-#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+<meta property="og:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以">
 <meta property="og:url" content="https://y1ban.com/saizeriya-problem-in-clp-fd/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -49,11 +41,7 @@
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
- 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
-コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku &#43; Flask &#43; LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
-大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
-#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).">
+	<meta name="twitter:description" content="はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以">
 <meta name="twitter:image" content="https://y1ban.com/saizeriya-problem-in-clp-fd/saizeriya.jpg">
 <meta property="article:published_time" content="2020-01-29T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2020-01-29T00:00:00&#43;00:00">
@@ -151,7 +139,7 @@
 
 <script src="/js/collapseAuthors.js"></script>
                     January 29, 2020
-                    • 5 min read
+                    • 10 min read
                 </div>
             </div>
         </header>
@@ -405,7 +393,7 @@
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2019 · 2 min read
+                                December 12, 2019 · 3 min read
                             </div>
                         </div>
                     </div>

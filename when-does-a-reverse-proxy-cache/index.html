@@ -25,24 +25,10 @@
 
 
 <title>リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするか？ | y1ban.com</title>
-<meta name="description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリバース・プロキシを書いたので解説してみる。
-リバース・プロキシのキャッシュの挙動について考えるとき、以下の２点を切り離して考える必要がある：
- どのようなリクエスト／レスポンスのときにキャッシュするか？ どのようなリクエストのときにキャッシュから返すか？  メルカリのケースでは、そもそもキャッシュして欲しくない情報がキャッシュされ、かつそれがユーザへのレスポンスとして使われたという問題なので、ここでは前者の「どのようなリクエスト／レスポンスのときにキャッシュするか？」について考える。
-リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするのか？ RFC7234的には以下のすべての条件を満たすときにキャッシュするかもしれない。
- キャッシュ可能なメソッドある キャッシュ可能なステータスコードである リクエストヘッダのCache-Controlにno-storeがない レスポンスヘッダのCache-Controlにno-storeやprivateがない リクエストヘッダにAuthorizationがない 以下のいずれかを満たす  レスポンスヘッダにExpiresがある、または レスポンスヘッダのCache-Controlにmax-ageがある、または レスポンスヘッダのCache-Controlにs-maxageがある、または レスポンスヘッダのCache-ControlにおいてCache Control Extensionsでキャッシュ可能だと指定されている、または キャッシュ可能だと定義されているステータス・コード、または レスポンスヘッダのCache-Controlにpublicがある    メルカリのケースではレスポンス・ヘッダに以下を指定していた。
-Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1秒前の時間) 上に書いたキャッシュの条件で、Cache-Control: no-cacheは出てこない。RFC7234では、no-cacheはキャッシュされたレスポンスを使わないように指定するものだと書いてある。つまり、「どのようなリクエストのときにキャッシュから返すか？」の話だ。
-意外なことに、古い日付のExpiresがあることはキャッシュされる原因になりうる。なぜなら、リバース・プロキシはアプリケーション・サーバ等の上流のサーバが反応しないときに、古い内容であると分かっていながらキャッシュからレスポンスを返すことがあるからだ。
-では、どうすればキャッシュされなくなるか？上に書いたキャッシュの条件に当てはまらなくなればいい。具体的にはレスポンスヘッダにCache-Control: privateでよい。">
+<meta name="description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリ">
 <meta property="og:title" content="リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするか？ | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリバース・プロキシを書いたので解説してみる。
-リバース・プロキシのキャッシュの挙動について考えるとき、以下の２点を切り離して考える必要がある：
- どのようなリクエスト／レスポンスのときにキャッシュするか？ どのようなリクエストのときにキャッシュから返すか？  メルカリのケースでは、そもそもキャッシュして欲しくない情報がキャッシュされ、かつそれがユーザへのレスポンスとして使われたという問題なので、ここでは前者の「どのようなリクエスト／レスポンスのときにキャッシュするか？」について考える。
-リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするのか？ RFC7234的には以下のすべての条件を満たすときにキャッシュするかもしれない。
- キャッシュ可能なメソッドある キャッシュ可能なステータスコードである リクエストヘッダのCache-Controlにno-storeがない レスポンスヘッダのCache-Controlにno-storeやprivateがない リクエストヘッダにAuthorizationがない 以下のいずれかを満たす  レスポンスヘッダにExpiresがある、または レスポンスヘッダのCache-Controlにmax-ageがある、または レスポンスヘッダのCache-Controlにs-maxageがある、または レスポンスヘッダのCache-ControlにおいてCache Control Extensionsでキャッシュ可能だと指定されている、または キャッシュ可能だと定義されているステータス・コード、または レスポンスヘッダのCache-Controlにpublicがある    メルカリのケースではレスポンス・ヘッダに以下を指定していた。
-Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1秒前の時間) 上に書いたキャッシュの条件で、Cache-Control: no-cacheは出てこない。RFC7234では、no-cacheはキャッシュされたレスポンスを使わないように指定するものだと書いてある。つまり、「どのようなリクエストのときにキャッシュから返すか？」の話だ。
-意外なことに、古い日付のExpiresがあることはキャッシュされる原因になりうる。なぜなら、リバース・プロキシはアプリケーション・サーバ等の上流のサーバが反応しないときに、古い内容であると分かっていながらキャッシュからレスポンスを返すことがあるからだ。
-では、どうすればキャッシュされなくなるか？上に書いたキャッシュの条件に当てはまらなくなればいい。具体的にはレスポンスヘッダにCache-Control: privateでよい。">
+<meta property="og:description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリ">
 <meta property="og:url" content="https://y1ban.com/when-does-a-reverse-proxy-cache/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -55,14 +41,7 @@ Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリバース・プロキシを書いたので解説してみる。
-リバース・プロキシのキャッシュの挙動について考えるとき、以下の２点を切り離して考える必要がある：
- どのようなリクエスト／レスポンスのときにキャッシュするか？ どのようなリクエストのときにキャッシュから返すか？  メルカリのケースでは、そもそもキャッシュして欲しくない情報がキャッシュされ、かつそれがユーザへのレスポンスとして使われたという問題なので、ここでは前者の「どのようなリクエスト／レスポンスのときにキャッシュするか？」について考える。
-リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするのか？ RFC7234的には以下のすべての条件を満たすときにキャッシュするかもしれない。
- キャッシュ可能なメソッドある キャッシュ可能なステータスコードである リクエストヘッダのCache-Controlにno-storeがない レスポンスヘッダのCache-Controlにno-storeやprivateがない リクエストヘッダにAuthorizationがない 以下のいずれかを満たす  レスポンスヘッダにExpiresがある、または レスポンスヘッダのCache-Controlにmax-ageがある、または レスポンスヘッダのCache-Controlにs-maxageがある、または レスポンスヘッダのCache-ControlにおいてCache Control Extensionsでキャッシュ可能だと指定されている、または キャッシュ可能だと定義されているステータス・コード、または レスポンスヘッダのCache-Controlにpublicがある    メルカリのケースではレスポンス・ヘッダに以下を指定していた。
-Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1秒前の時間) 上に書いたキャッシュの条件で、Cache-Control: no-cacheは出てこない。RFC7234では、no-cacheはキャッシュされたレスポンスを使わないように指定するものだと書いてある。つまり、「どのようなリクエストのときにキャッシュから返すか？」の話だ。
-意外なことに、古い日付のExpiresがあることはキャッシュされる原因になりうる。なぜなら、リバース・プロキシはアプリケーション・サーバ等の上流のサーバが反応しないときに、古い内容であると分かっていながらキャッシュからレスポンスを返すことがあるからだ。
-では、どうすればキャッシュされなくなるか？上に書いたキャッシュの条件に当てはまらなくなればいい。具体的にはレスポンスヘッダにCache-Control: privateでよい。">
+	<meta name="twitter:description" content="メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリ">
 <meta name="twitter:image" content="https://y1ban.com/when-does-a-reverse-proxy-cache/fabio-issao-h9j5OJVhx68-unsplash.jpg">
 <meta property="article:published_time" content="2017-06-23T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2017-06-23T00:00:00&#43;00:00">
@@ -160,7 +139,7 @@ Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1
 
 <script src="/js/collapseAuthors.js"></script>
                     June 23, 2017
-                    • 1 min read
+                    • 3 min read
                 </div>
             </div>
         </header>
@@ -281,7 +260,7 @@ Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1秒前の時間)
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2016 · 6 min read
+                                December 12, 2016 · 3 min read
                             </div>
                         </div>
                     </div>

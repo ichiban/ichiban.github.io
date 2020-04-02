@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Diaries on y1ban.com</title>
+    <link>https://y1ban.com/diary/</link>
+    <description>Recent content in Diaries on y1ban.com</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>ja</language>
+    <lastBuildDate>Thu, 02 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://y1ban.com/diary/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>2020-04-02</title>
+      <link>https://y1ban.com/diary/2020/04/02/</link>
+      <pubDate>Thu, 02 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://y1ban.com/diary/2020/04/02/</guid>
+      <description>午前中に母から着信あり。昼過ぎに返す。不審な司法書士事務所からの手紙について。父方の祖父の腹違いの妹からの遺産相続手続きに関するものだった。</description>
+    </item>
+    
+    <item>
+      <title>2020-04-01</title>
+      <link>https://y1ban.com/diary/2020/04/01/</link>
+      <pubDate>Wed, 01 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://y1ban.com/diary/2020/04/01/</guid>
+      <description>今日も一日外出せずに過ごす。 朝食にはプンパニッケル２枚、それぞれカッテージチーズ＆オリーブ（生ハムがあればよかった）とカッテージチーズ＆メー</description>
+    </item>
+    
+  </channel>
+</rss>

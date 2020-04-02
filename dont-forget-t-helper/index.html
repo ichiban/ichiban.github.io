@@ -25,18 +25,10 @@
 
 
 <title>Goのテストでヘルパー関数に t.Helper() を忘れない | y1ban.com</title>
-<meta name="description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。
-この記事では、ヘルパー関数としてマークしないとどういった問題があるか、マークするとどう問題が改善されるか、またマークし忘れを防ぐ方法について説明する。
-ヘルパー関数としてマークしないと ヘルパー関数 testChdir() を用いたテストについて考える。この関数は第２引数に存在しないパスを渡すと t.Fatalf() が呼ばれる。 TestFoo() は存在しないパスで testChdir() を呼ぶため失敗する。
-しかし go test の出力で失敗の箇所は b_test.go:22 であり、これは testChdir() 内の t.Fatalf(&quot;err: %s&quot;, err) を指している。そのため、なぜテストが失敗しているのかを理解するのにあまり有用ではない。
-package b import ( &#34;os&#34; &#34;testing&#34; ) func TestFoo(t *testing.T) { defer testChdir(t, &#34;/this/directory/does/not/exist&#34;)() // ... } // https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=30 func testChdir(t *testing.T, dir string) func() { old, err := os.Getwd() if err != nil { t.Fatalf(&#34;err: %s&#34;, err) } if err := os.Chdir(dir); err !">
+<meta name="description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。 この記事では、ヘルパー関数としてマークしないとどうい">
 <meta property="og:title" content="Goのテストでヘルパー関数に t.Helper() を忘れない | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。
-この記事では、ヘルパー関数としてマークしないとどういった問題があるか、マークするとどう問題が改善されるか、またマークし忘れを防ぐ方法について説明する。
-ヘルパー関数としてマークしないと ヘルパー関数 testChdir() を用いたテストについて考える。この関数は第２引数に存在しないパスを渡すと t.Fatalf() が呼ばれる。 TestFoo() は存在しないパスで testChdir() を呼ぶため失敗する。
-しかし go test の出力で失敗の箇所は b_test.go:22 であり、これは testChdir() 内の t.Fatalf(&quot;err: %s&quot;, err) を指している。そのため、なぜテストが失敗しているのかを理解するのにあまり有用ではない。
-package b import ( &#34;os&#34; &#34;testing&#34; ) func TestFoo(t *testing.T) { defer testChdir(t, &#34;/this/directory/does/not/exist&#34;)() // ... } // https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=30 func testChdir(t *testing.T, dir string) func() { old, err := os.Getwd() if err != nil { t.Fatalf(&#34;err: %s&#34;, err) } if err := os.Chdir(dir); err !">
+<meta property="og:description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。 この記事では、ヘルパー関数としてマークしないとどうい">
 <meta property="og:url" content="https://y1ban.com/dont-forget-t-helper/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -49,11 +41,7 @@ package b import ( &#34;os&#34; &#34;testing&#34; ) func TestFoo(t *testing.T) {
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。
-この記事では、ヘルパー関数としてマークしないとどういった問題があるか、マークするとどう問題が改善されるか、またマークし忘れを防ぐ方法について説明する。
-ヘルパー関数としてマークしないと ヘルパー関数 testChdir() を用いたテストについて考える。この関数は第２引数に存在しないパスを渡すと t.Fatalf() が呼ばれる。 TestFoo() は存在しないパスで testChdir() を呼ぶため失敗する。
-しかし go test の出力で失敗の箇所は b_test.go:22 であり、これは testChdir() 内の t.Fatalf(&quot;err: %s&quot;, err) を指している。そのため、なぜテストが失敗しているのかを理解するのにあまり有用ではない。
-package b import ( &#34;os&#34; &#34;testing&#34; ) func TestFoo(t *testing.T) { defer testChdir(t, &#34;/this/directory/does/not/exist&#34;)() // ... } // https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=30 func testChdir(t *testing.T, dir string) func() { old, err := os.Getwd() if err != nil { t.Fatalf(&#34;err: %s&#34;, err) } if err := os.Chdir(dir); err !">
+	<meta name="twitter:description" content="はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。 この記事では、ヘルパー関数としてマークしないとどうい">
 <meta name="twitter:image" content="https://y1ban.com/dont-forget-t-helper/fabrizio-frigeni-vHLj6G8xLhU-unsplash.jpg">
 <meta property="article:published_time" content="2019-12-07T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2019-12-07T00:00:00&#43;00:00">
@@ -303,7 +291,7 @@ FAIL    github.com/ichiban/thelper/testdata/src/b       0.006s
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2019 · 3 min read
+                                December 12, 2019 · 4 min read
                             </div>
                         </div>
                     </div>
@@ -323,7 +311,7 @@ FAIL    github.com/ichiban/thelper/testdata/src/b       0.006s
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2018 · 3 min read
+                                December 12, 2018 · 4 min read
                             </div>
                         </div>
                     </div>

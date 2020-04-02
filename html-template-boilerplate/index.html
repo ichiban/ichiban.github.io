@@ -25,22 +25,10 @@
 
 
 <title>html/templateで共通のボイラープレートを使いまわして異なるコンテンツを出す | y1ban.com</title>
-<meta name="description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して共通化したい。
-やりかた あらかじめ、初期化時にすべてのテンプレートをパースしておく。このとき、ボイラープレート中で &quot;content&quot; を未定義としておき、コンテンツでも定義しないでおく。レンダリング時、コンテンツ毎に &quot;content&quot; をそのコンテンツのパース済みのテンプレートへの別名として定義しレンダリングする。
-具体例 ボイラープレートを layout.html 、異なる２つのコンテンツとして foo.html と bar.html を使った例を考える。
-foo.html と bar.html は個別のコンテンツを含むが、 &lt;html&gt; や &lt;body&gt; といったボイラープレートが無い不完全なテンプレートであり、一方 layout.html は &quot;content&quot; が未定義なのでこのままではレンダリングできないテンプレートである。
-これら３つのテンプレートを含む *template.Template をクローンし、 &quot;content&quot; を foo.html または bar.html の *parse.Tree に紐付けることで、ボイラープレートを使ったテンプレートが得られる。
-https://play.golang.org/p/yLlFoOe2ET
-package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `var ts = template.Must(template.ParseGlob(&#34;./views/*.html&#34;))` とかでやりそう var ts *template.Template func init() { ts = template.Must(template.New(&#34;layout.html&#34;).Parse(` &lt;html&gt; &lt;body&gt; {{ template &#34;content&#34; .">
+<meta name="description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して">
 <meta property="og:title" content="html/templateで共通のボイラープレートを使いまわして異なるコンテンツを出す | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して共通化したい。
-やりかた あらかじめ、初期化時にすべてのテンプレートをパースしておく。このとき、ボイラープレート中で &quot;content&quot; を未定義としておき、コンテンツでも定義しないでおく。レンダリング時、コンテンツ毎に &quot;content&quot; をそのコンテンツのパース済みのテンプレートへの別名として定義しレンダリングする。
-具体例 ボイラープレートを layout.html 、異なる２つのコンテンツとして foo.html と bar.html を使った例を考える。
-foo.html と bar.html は個別のコンテンツを含むが、 &lt;html&gt; や &lt;body&gt; といったボイラープレートが無い不完全なテンプレートであり、一方 layout.html は &quot;content&quot; が未定義なのでこのままではレンダリングできないテンプレートである。
-これら３つのテンプレートを含む *template.Template をクローンし、 &quot;content&quot; を foo.html または bar.html の *parse.Tree に紐付けることで、ボイラープレートを使ったテンプレートが得られる。
-https://play.golang.org/p/yLlFoOe2ET
-package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `var ts = template.Must(template.ParseGlob(&#34;./views/*.html&#34;))` とかでやりそう var ts *template.Template func init() { ts = template.Must(template.New(&#34;layout.html&#34;).Parse(` &lt;html&gt; &lt;body&gt; {{ template &#34;content&#34; .">
+<meta property="og:description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して">
 <meta property="og:url" content="https://y1ban.com/html-template-boilerplate/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -53,13 +41,7 @@ package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `va
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して共通化したい。
-やりかた あらかじめ、初期化時にすべてのテンプレートをパースしておく。このとき、ボイラープレート中で &quot;content&quot; を未定義としておき、コンテンツでも定義しないでおく。レンダリング時、コンテンツ毎に &quot;content&quot; をそのコンテンツのパース済みのテンプレートへの別名として定義しレンダリングする。
-具体例 ボイラープレートを layout.html 、異なる２つのコンテンツとして foo.html と bar.html を使った例を考える。
-foo.html と bar.html は個別のコンテンツを含むが、 &lt;html&gt; や &lt;body&gt; といったボイラープレートが無い不完全なテンプレートであり、一方 layout.html は &quot;content&quot; が未定義なのでこのままではレンダリングできないテンプレートである。
-これら３つのテンプレートを含む *template.Template をクローンし、 &quot;content&quot; を foo.html または bar.html の *parse.Tree に紐付けることで、ボイラープレートを使ったテンプレートが得られる。
-https://play.golang.org/p/yLlFoOe2ET
-package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `var ts = template.Must(template.ParseGlob(&#34;./views/*.html&#34;))` とかでやりそう var ts *template.Template func init() { ts = template.Must(template.New(&#34;layout.html&#34;).Parse(` &lt;html&gt; &lt;body&gt; {{ template &#34;content&#34; .">
+	<meta name="twitter:description" content="やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して">
 <meta name="twitter:image" content="https://y1ban.com/html-template-boilerplate/neven-krcmarek-0TH1H1rq_eY-unsplash.jpg">
 <meta property="article:published_time" content="2017-08-27T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2017-08-27T00:00:00&#43;00:00">
@@ -157,7 +139,7 @@ package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `va
 
 <script src="/js/collapseAuthors.js"></script>
                     August 27, 2017
-                    • 1 min read
+                    • 2 min read
                 </div>
             </div>
         </header>
@@ -283,7 +265,7 @@ package main import ( &#34;html/template&#34; &#34;os&#34; ) // 実際には `va
                                 
                             </p>
                             <div class="article-metadata">
-                                June 6, 2017 · 1 min read
+                                June 6, 2017 · 3 min read
                             </div>
                         </div>
                     </div>

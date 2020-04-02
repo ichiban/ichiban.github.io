@@ -25,16 +25,10 @@
 
 
 <title>Goの静的解析ツールで実装コードだけを走査する | y1ban.com</title>
-<meta name="description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点を当てた静的解析ツールを作る際に邪魔になる。
-ここでは Nodes を使った走査を紹介し、それを用いてテストファイルとジェネレータで生成されたファイルを除外する方法を説明する。
-Preorderを使った走査 定義した関数名を一覧する静的解析ツールについて考える。 Preorder を使うとかなりそれらしいものがシンプルに書ける。
-package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#34; &#34;golang.org/x/tools/go/analysis/passes/inspect&#34; &#34;golang.org/x/tools/go/ast/inspector&#34; ) var Analyzer = &amp;analysis.Analyzer{ Name: &#34;funcdecl&#34;, Doc: `find function declarations`, Requires: []*analysis.Analyzer{inspect.Analyzer}, Run: run, } func run(pass *analysis.Pass) (interface{}, error) { inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector) inspect.Preorder([]ast.Node{ (*ast.FuncDecl)(nil), // 関心のあるノードの種類の値を列挙する（この例では関数定義のみ） 	}, func(node ast.Node) { f := node.(*ast.FuncDecl) pass.Reportf(f.Pos(), `found %s`, f.Name) }) return nil, nil } しかしこれには問題があり、テストファイルとジェネレータで生成されたファイルも対象となってしまう。以下の例で a_test.go はテストファイル、最後のキャッシュはビルド由来の生成されたファイルである。これらを除外したい。">
+<meta name="description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点">
 <meta property="og:title" content="Goの静的解析ツールで実装コードだけを走査する | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点を当てた静的解析ツールを作る際に邪魔になる。
-ここでは Nodes を使った走査を紹介し、それを用いてテストファイルとジェネレータで生成されたファイルを除外する方法を説明する。
-Preorderを使った走査 定義した関数名を一覧する静的解析ツールについて考える。 Preorder を使うとかなりそれらしいものがシンプルに書ける。
-package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#34; &#34;golang.org/x/tools/go/analysis/passes/inspect&#34; &#34;golang.org/x/tools/go/ast/inspector&#34; ) var Analyzer = &amp;analysis.Analyzer{ Name: &#34;funcdecl&#34;, Doc: `find function declarations`, Requires: []*analysis.Analyzer{inspect.Analyzer}, Run: run, } func run(pass *analysis.Pass) (interface{}, error) { inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector) inspect.Preorder([]ast.Node{ (*ast.FuncDecl)(nil), // 関心のあるノードの種類の値を列挙する（この例では関数定義のみ） 	}, func(node ast.Node) { f := node.(*ast.FuncDecl) pass.Reportf(f.Pos(), `found %s`, f.Name) }) return nil, nil } しかしこれには問題があり、テストファイルとジェネレータで生成されたファイルも対象となってしまう。以下の例で a_test.go はテストファイル、最後のキャッシュはビルド由来の生成されたファイルである。これらを除外したい。">
+<meta property="og:description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点">
 <meta property="og:url" content="https://y1ban.com/scan-only-implementation-code-in-go/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -47,10 +41,7 @@ package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点を当てた静的解析ツールを作る際に邪魔になる。
-ここでは Nodes を使った走査を紹介し、それを用いてテストファイルとジェネレータで生成されたファイルを除外する方法を説明する。
-Preorderを使った走査 定義した関数名を一覧する静的解析ツールについて考える。 Preorder を使うとかなりそれらしいものがシンプルに書ける。
-package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#34; &#34;golang.org/x/tools/go/analysis/passes/inspect&#34; &#34;golang.org/x/tools/go/ast/inspector&#34; ) var Analyzer = &amp;analysis.Analyzer{ Name: &#34;funcdecl&#34;, Doc: `find function declarations`, Requires: []*analysis.Analyzer{inspect.Analyzer}, Run: run, } func run(pass *analysis.Pass) (interface{}, error) { inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector) inspect.Preorder([]ast.Node{ (*ast.FuncDecl)(nil), // 関心のあるノードの種類の値を列挙する（この例では関数定義のみ） 	}, func(node ast.Node) { f := node.(*ast.FuncDecl) pass.Reportf(f.Pos(), `found %s`, f.Name) }) return nil, nil } しかしこれには問題があり、テストファイルとジェネレータで生成されたファイルも対象となってしまう。以下の例で a_test.go はテストファイル、最後のキャッシュはビルド由来の生成されたファイルである。これらを除外したい。">
+	<meta name="twitter:description" content="はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点">
 <meta name="twitter:image" content="https://y1ban.com/scan-only-implementation-code-in-go/niko-photos-tGTVxeOr_Rs-unsplash.jpg">
 <meta property="article:published_time" content="2019-12-02T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2019-12-02T00:00:00&#43;00:00">
@@ -148,7 +139,7 @@ package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#
 
 <script src="/js/collapseAuthors.js"></script>
                     December 2, 2019
-                    • 3 min read
+                    • 4 min read
                 </div>
             </div>
         </header>
@@ -461,7 +452,7 @@ package funcdecl import ( &#34;go/ast&#34; &#34;golang.org/x/tools/go/analysis&#
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2018 · 3 min read
+                                December 12, 2018 · 4 min read
                             </div>
                         </div>
                     </div>

@@ -25,14 +25,10 @@
 
 
 <title>http.Transport はHTTPプロキシの先がHTTPかHTTPSかで挙動が違う | y1ban.com</title>
-<meta name="description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを返すとき、接続先がHTTPかHTTPSかで異なるふるまいをすることに気づいた
-https://play.golang.org/p/8K_9FUxyU_r
-package main import ( &#34;crypto/tls&#34; &#34;fmt&#34; &#34;io&#34; &#34;net&#34; &#34;net/http&#34; &#34;net/http/httptest&#34; &#34;net/url&#34; &#34;regexp&#34; &#34;sync&#34; ) func main() { origin := origin() defer origin.Close() originTLS := originTLS() defer originTLS.Close() ok := okProxy() defer ok.Close() badGateway := badGatewayProxy() defer badGateway.Close() testCases := []struct { title string origin *httptest.Server proxy *httptest.Server status int error *regexp.Regexp }{ { title: &#34;オリジンがHTTP、プロキシがOK&#34;, origin: origin, proxy: ok, status: http.">
+<meta name="description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを">
 <meta property="og:title" content="http.Transport はHTTPプロキシの先がHTTPかHTTPSかで挙動が違う | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを返すとき、接続先がHTTPかHTTPSかで異なるふるまいをすることに気づいた
-https://play.golang.org/p/8K_9FUxyU_r
-package main import ( &#34;crypto/tls&#34; &#34;fmt&#34; &#34;io&#34; &#34;net&#34; &#34;net/http&#34; &#34;net/http/httptest&#34; &#34;net/url&#34; &#34;regexp&#34; &#34;sync&#34; ) func main() { origin := origin() defer origin.Close() originTLS := originTLS() defer originTLS.Close() ok := okProxy() defer ok.Close() badGateway := badGatewayProxy() defer badGateway.Close() testCases := []struct { title string origin *httptest.Server proxy *httptest.Server status int error *regexp.Regexp }{ { title: &#34;オリジンがHTTP、プロキシがOK&#34;, origin: origin, proxy: ok, status: http.">
+<meta property="og:description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを">
 <meta property="og:url" content="https://y1ban.com/http-transport-behaves-differently-in-http-or-https/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -45,9 +41,7 @@ package main import ( &#34;crypto/tls&#34; &#34;fmt&#34; &#34;io&#34; &#34;net&#
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを返すとき、接続先がHTTPかHTTPSかで異なるふるまいをすることに気づいた
-https://play.golang.org/p/8K_9FUxyU_r
-package main import ( &#34;crypto/tls&#34; &#34;fmt&#34; &#34;io&#34; &#34;net&#34; &#34;net/http&#34; &#34;net/http/httptest&#34; &#34;net/url&#34; &#34;regexp&#34; &#34;sync&#34; ) func main() { origin := origin() defer origin.Close() originTLS := originTLS() defer originTLS.Close() ok := okProxy() defer ok.Close() badGateway := badGatewayProxy() defer badGateway.Close() testCases := []struct { title string origin *httptest.Server proxy *httptest.Server status int error *regexp.Regexp }{ { title: &#34;オリジンがHTTP、プロキシがOK&#34;, origin: origin, proxy: ok, status: http.">
+	<meta name="twitter:description" content="http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを">
 <meta name="twitter:image" content="https://y1ban.com/http-transport-behaves-differently-in-http-or-https/joey-kyber-45FJgZMXCK8-unsplash.jpg">
 <meta property="article:published_time" content="2018-02-25T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2018-02-25T00:00:00&#43;00:00">
@@ -402,7 +396,7 @@ package main import ( &#34;crypto/tls&#34; &#34;fmt&#34; &#34;io&#34; &#34;net&#
                                 
                             </p>
                             <div class="article-metadata">
-                                August 8, 2017 · 1 min read
+                                August 8, 2017 · 2 min read
                             </div>
                         </div>
                     </div>

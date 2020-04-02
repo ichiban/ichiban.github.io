@@ -17,11 +17,7 @@
       <pubDate>Wed, 29 Jan 2020 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/saizeriya-problem-in-clp-fd/</guid>
-      <description>はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以下になるように選んだときに、最大の総カロリーになるようなメニューの組み合わせを求めよ」 という問題で、様々な解法が知られている:
- 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を量子アニーリング計算(Wildqat)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を整数計画法ソルバー(PuLP)で解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をマルコフ連鎖モンテカルロで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をExcel のソルバーでで解いてみた。 【Excel】サイゼリヤ1000円で摂れるカロリーの最大値をVLOOKUP関数だけで求める方法 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をなでしこでDPで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を自作CPU上で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」を全探索で解いてみた 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSQLで解いてみた。 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をTeX言語で計算する ～TeX言語で動的計画法(DP)～ 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をPandocで解いてみた  ここでは SWI-Prolog の CLP(FD) を用いた制約論理プログラミングでの解法を紹介する
-コード メニューのデータは サイゼリヤ1000円ガチャをつくってみた(Heroku + Flask + LINEbot) で紹介されている Saizeriya_100yenの#1ブランチ からとった
-大きな流れは 「サイゼリヤで1000円あれば最大何kcal摂れるのか」をSMTソルバー(Z3)で解いてみた。 と同じであろう。総額と総カロリーに関する制約を記述し、全メニューに対して0か1かの値の割り当てを行う
-#!/usr/bin/env swipl :- use_module(library(clpfd)). :- initialization(main, main). main :- time(saizeriya). saizeriya :- % 必要なカラムだけに絞り込む findall(menu(Name, Price, Calorie), menu(_, Name, _, _, Price, Calorie, _), Menus), % すべてのメニューに対して、注文しない・一つ注文するをそれぞれ0/1で表す same_length(Menus, Vars), Vars ins 0..1, % 合計金額が1,000円を超えない maplist(arg(2), Menus, AllPrices), scalar_product(AllPrices, Vars, #=&amp;lt;, 1000), % 総カロリー maplist(arg(3), Menus, AllCalories), scalar_product(AllCalories, Vars, #=, Cal), % カロリーを最大化するんだという強い意志 labeling([max(Cal)], Vars), print_result(Menus, Vars).</description>
+      <description>はじめに 「サイゼリヤで1000円あれば最大何kcal摂れるのか」あるいはサイゼリヤ問題とは 「サイゼリヤのメニューを重複無しで合計1000円以</description>
     </item>
     
     <item>
@@ -30,11 +26,7 @@
       <pubDate>Wed, 11 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/avoid-external-function-calls/</guid>
-      <description>はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。
-別パッケージの関数呼び出し 以下のプログラムで main をどうやってテストすればいいだろうか？例えば当日のお昼12:00に0日前だと表示されるケースをどう書けるだろうか。
-package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) var date = must(time.Parse(time.RFC3339, &amp;#34;2019-12-20T00:00:00+09:00&amp;#34;)) func main() { d := date.Sub(time.Now()).Hours() / 24 fmt.Printf(&amp;#34;『スター・ウォーズ／スカイウォーカーの夜明け』まであと%d日\n&amp;#34;, int(d)) } func must(t time.Time, err error) time.Time { if err != nil { panic(err) } return t } この例のように、 time.Now や fmt.Printf のような別パッケージの関数の呼び出しがあるとテストできない12。テストできないので、別パッケージの関数呼び出しは禁止すべき。
-関数の変数を経由した呼び出し 一方、別パッケージの関数を変数に代入した場合、呼び出される関数はテスト時に置き換えることができる。
-package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) var ( timeParse = time.Parse timeDurationHours = time.Duration.Hours timeTimeSub = time.</description>
+      <description>はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。 別</description>
     </item>
     
     <item>
@@ -43,11 +35,7 @@ package main import ( &amp;#34;fmt&amp;#34; &amp;#34;time&amp;#34; ) var ( timeP
       <pubDate>Sat, 07 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/dont-forget-t-helper/</guid>
-      <description>はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。
-この記事では、ヘルパー関数としてマークしないとどういった問題があるか、マークするとどう問題が改善されるか、またマークし忘れを防ぐ方法について説明する。
-ヘルパー関数としてマークしないと ヘルパー関数 testChdir() を用いたテストについて考える。この関数は第２引数に存在しないパスを渡すと t.Fatalf() が呼ばれる。 TestFoo() は存在しないパスで testChdir() を呼ぶため失敗する。
-しかし go test の出力で失敗の箇所は b_test.go:22 であり、これは testChdir() 内の t.Fatalf(&amp;quot;err: %s&amp;quot;, err) を指している。そのため、なぜテストが失敗しているのかを理解するのにあまり有用ではない。
-package b import ( &amp;#34;os&amp;#34; &amp;#34;testing&amp;#34; ) func TestFoo(t *testing.T) { defer testChdir(t, &amp;#34;/this/directory/does/not/exist&amp;#34;)() // ... } // https://speakerdeck.com/mitchellh/advanced-testing-with-go?slide=30 func testChdir(t *testing.T, dir string) func() { old, err := os.Getwd() if err != nil { t.Fatalf(&amp;#34;err: %s&amp;#34;, err) } if err := os.Chdir(dir); err !</description>
+      <description>はじめに Goのテストにおいて、ヘルパー関数は t.Helper() を呼ぶことでヘルパー関数だとマークできる。 この記事では、ヘルパー関数としてマークしないとどうい</description>
     </item>
     
     <item>
@@ -56,10 +44,7 @@ package b import ( &amp;#34;os&amp;#34; &amp;#34;testing&amp;#34; ) func TestFoo
       <pubDate>Mon, 02 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/scan-only-implementation-code-in-go/</guid>
-      <description>はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点を当てた静的解析ツールを作る際に邪魔になる。
-ここでは Nodes を使った走査を紹介し、それを用いてテストファイルとジェネレータで生成されたファイルを除外する方法を説明する。
-Preorderを使った走査 定義した関数名を一覧する静的解析ツールについて考える。 Preorder を使うとかなりそれらしいものがシンプルに書ける。
-package funcdecl import ( &amp;#34;go/ast&amp;#34; &amp;#34;golang.org/x/tools/go/analysis&amp;#34; &amp;#34;golang.org/x/tools/go/analysis/passes/inspect&amp;#34; &amp;#34;golang.org/x/tools/go/ast/inspector&amp;#34; ) var Analyzer = &amp;amp;analysis.Analyzer{ Name: &amp;#34;funcdecl&amp;#34;, Doc: `find function declarations`, Requires: []*analysis.Analyzer{inspect.Analyzer}, Run: run, } func run(pass *analysis.Pass) (interface{}, error) { inspect := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector) inspect.Preorder([]ast.Node{ (*ast.FuncDecl)(nil), // 関心のあるノードの種類の値を列挙する（この例では関数定義のみ） 	}, func(node ast.Node) { f := node.(*ast.FuncDecl) pass.Reportf(f.Pos(), `found %s`, f.Name) }) return nil, nil } しかしこれには問題があり、テストファイルとジェネレータで生成されたファイルも対象となってしまう。以下の例で a_test.go はテストファイル、最後のキャッシュはビルド由来の生成されたファイルである。これらを除外したい。</description>
+      <description>はじめに Goの静的解析ツールは golang.org/x/tools/go/analysis を使うことで開発でき、構文木を走査するのに golang.org/x/tools/go/analysis/passes/inspect が使える。しかし実装コード以外も走査されるため、実装コードに焦点</description>
     </item>
     
     <item>
@@ -68,14 +53,7 @@ package funcdecl import ( &amp;#34;go/ast&amp;#34; &amp;#34;golang.org/x/tools/g
       <pubDate>Sat, 01 Dec 2018 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/zip-asset-embedding-in-go/</guid>
-      <description>はじめに ZIPを用いた実行ファイルへのリソースの埋め込み方法があることを紹介し、実際にGoの archive/zip と zip コマンドと cat コマンド（と確認のために unzip コマンド）を用いたリソース埋め込みの例を解説する。
-Goのリソース埋め込み Goでアプリケーションを書く際、CSSやJavaScript、画像、テンプレートといったリソースは実行ファイルとは別に配置するか実行ファイルの中に埋め込むかしないといけない。リソースの埋め込みにはコードジェネレータを用いる方法とZIPを使う方法がある。
-コードジェネレータ リソースの埋め込みでよく紹介されるのはコードジェネレータを用いてリソースをGoのソースコードに変換するという方法で、実際 Awesome Go の Resource Embeddingの項目 にあるのはコードジェネレータを用いてGoのソースコードに変換するアプローチのものしかない。
-ZIP 一方、リソースをZIPファイルにまとめて実行ファイルに追記するという埋め込み方もある。既に Zgok というライブラリがあり、作者の @srtkkou さんが解説（Golangで静的ファイルをバイナリに含めるライブラリを書いてみた）を書かれている。
-ZIPファイルの仕様ではself-extractingなZIPファイルはターゲットプラットフォームごとの展開コードを含まなければならないとある。
- 4.1.9 ZIP files MAY be streamed, split into segments (on fixed or on removable media) or &amp;ldquo;self-extracting&amp;rdquo;. Self-extracting ZIP files MUST include extraction code for a target platform within the ZIP file.
- また、zip コマンドのmanページにはself-extractingな実行可能ファイル兼アーカイブは既存のアーカイブにSFXスタブを前置することで作られるとある。
- A self-extracting executable archive is created by prepending the SFX stub to an existing archive.</description>
+      <description>はじめに ZIPを用いた実行ファイルへのリソースの埋め込み方法があることを紹介し、実際にGoの archive/zip と zip コマンドと cat コマンド（と確認のために unzip コマ</description>
     </item>
     
     <item>
@@ -84,9 +62,7 @@ ZIPファイルの仕様ではself-extractingなZIPファイルはターゲッ�
       <pubDate>Sun, 25 Feb 2018 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/http-transport-behaves-differently-in-http-or-https/</guid>
-      <description>http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを返すとき、接続先がHTTPかHTTPSかで異なるふるまいをすることに気づいた
-https://play.golang.org/p/8K_9FUxyU_r
-package main import ( &amp;#34;crypto/tls&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io&amp;#34; &amp;#34;net&amp;#34; &amp;#34;net/http&amp;#34; &amp;#34;net/http/httptest&amp;#34; &amp;#34;net/url&amp;#34; &amp;#34;regexp&amp;#34; &amp;#34;sync&amp;#34; ) func main() { origin := origin() defer origin.Close() originTLS := originTLS() defer originTLS.Close() ok := okProxy() defer ok.Close() badGateway := badGatewayProxy() defer badGateway.Close() testCases := []struct { title string origin *httptest.Server proxy *httptest.Server status int error *regexp.Regexp }{ { title: &amp;#34;オリジンがHTTP、プロキシがOK&amp;#34;, origin: origin, proxy: ok, status: http.</description>
+      <description>http.Client 等で内部的に使われている http.Transport はプロキシの利用を隠蔽するが、HTTPプロキシを利用しておりそのプロキシが CONNECT に対して 200 OK 以外のステータスコードを</description>
     </item>
     
     <item>
@@ -95,10 +71,7 @@ package main import ( &amp;#34;crypto/tls&amp;#34; &amp;#34;fmt&amp;#34; &amp;#3
       <pubDate>Fri, 01 Dec 2017 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/hal-json-in-goa/</guid>
-      <description>はじめに Goでweb APIを作る際にはgoaが便利だが、デザイン時にひと工夫することでAPIの柔軟性が増す。ここではgoaの例としてしばしば用いられるワインセラーのAPIを基に、HAL+JSONを取り入れることでセラーの中身すべてを１リクエストで取得する。
-セラーの中身をすべて オリジナルのデザインのAPIでセラーの中身すべて、すなわち全アカウントの全ボトルの情報を取得するにはどうすればいいだろうか？
-これは /cellar/accounts を起点に各アカウントからアカウント毎のボトルの一覧、ボトルの詳細へと辿って行くことで実現できる。
-$ curl http://localhost:8081/cellar/accounts [{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;}] $ curl http://localhost:8081/cellar/accounts/1 {&amp;quot;created_at&amp;quot;:&amp;quot;0001-01-01T00:00:00Z&amp;quot;,&amp;quot;created_by&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;} $ curl http://localhost:8081/cellar/accounts/2 {&amp;quot;created_at&amp;quot;:&amp;quot;0001-01-01T00:00:00Z&amp;quot;,&amp;quot;created_by&amp;quot;:&amp;quot;&amp;quot;,&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;} $ curl http://localhost:8081/cellar/accounts/1/bottles [{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/100&amp;quot;,&amp;quot;id&amp;quot;:100,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Number 8&amp;quot;,&amp;quot;rating&amp;quot;:4,&amp;quot;varietal&amp;quot;:&amp;quot;Merlot&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Asti Winery&amp;quot;,&amp;quot;vintage&amp;quot;:2012},{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/101&amp;quot;,&amp;quot;id&amp;quot;:101,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Mourvedre&amp;quot;,&amp;quot;rating&amp;quot;:3,&amp;quot;varietal&amp;quot;:&amp;quot;Mourvedre&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Rideau&amp;quot;,&amp;quot;vintage&amp;quot;:2012},{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/102&amp;quot;,&amp;quot;id&amp;quot;:102,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Blue&#39;s Cuvee&amp;quot;,&amp;quot;rating&amp;quot;:5,&amp;quot;varietal&amp;quot;:&amp;quot;Cabernet Franc with Merlot, Malbec, Cabernet Sauvignon and Syrah&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Longoria&amp;quot;,&amp;quot;vintage&amp;quot;:2012}] $ curl http://localhost:8081/cellar/accounts/2/bottles [{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2/bottles/200&amp;quot;,&amp;quot;id&amp;quot;:200,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2}},&amp;quot;name&amp;quot;:&amp;quot;Blackstone Merlot&amp;quot;,&amp;quot;rating&amp;quot;:3,&amp;quot;varietal&amp;quot;:&amp;quot;Merlot&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Blackstone&amp;quot;,&amp;quot;vintage&amp;quot;:2012},{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2/bottles/201&amp;quot;,&amp;quot;id&amp;quot;:201,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2}},&amp;quot;name&amp;quot;:&amp;quot;Wild Horse&amp;quot;,&amp;quot;rating&amp;quot;:4,&amp;quot;varietal&amp;quot;:&amp;quot;Pinot Noir&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Wild Horse&amp;quot;,&amp;quot;vintage&amp;quot;:2010}] $ curl http://localhost:8081/cellar/accounts/1/bottles/100 {&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/100&amp;quot;,&amp;quot;id&amp;quot;:100,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Number 8&amp;quot;,&amp;quot;rating&amp;quot;:4,&amp;quot;varietal&amp;quot;:&amp;quot;Merlot&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Asti Winery&amp;quot;,&amp;quot;vintage&amp;quot;:2012} $ curl http://localhost:8081/cellar/accounts/1/bottles/101 {&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/101&amp;quot;,&amp;quot;id&amp;quot;:101,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Mourvedre&amp;quot;,&amp;quot;rating&amp;quot;:3,&amp;quot;varietal&amp;quot;:&amp;quot;Mourvedre&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Rideau&amp;quot;,&amp;quot;vintage&amp;quot;:2012} $ curl http://localhost:8081/cellar/accounts/1/bottles/102 {&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1,&amp;quot;name&amp;quot;:&amp;quot;account 1&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1/bottles/102&amp;quot;,&amp;quot;id&amp;quot;:102,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/1&amp;quot;,&amp;quot;id&amp;quot;:1}},&amp;quot;name&amp;quot;:&amp;quot;Blue&#39;s Cuvee&amp;quot;,&amp;quot;rating&amp;quot;:5,&amp;quot;varietal&amp;quot;:&amp;quot;Cabernet Franc with Merlot, Malbec, Cabernet Sauvignon and Syrah&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Longoria&amp;quot;,&amp;quot;vintage&amp;quot;:2012} $ curl http://localhost:8081/cellar/accounts/2/bottles/200 {&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2/bottles/200&amp;quot;,&amp;quot;id&amp;quot;:200,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2}},&amp;quot;name&amp;quot;:&amp;quot;Blackstone Merlot&amp;quot;,&amp;quot;rating&amp;quot;:3,&amp;quot;varietal&amp;quot;:&amp;quot;Merlot&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Blackstone&amp;quot;,&amp;quot;vintage&amp;quot;:2012} $ curl http://localhost:8081/cellar/accounts/2/bottles/201 {&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2,&amp;quot;name&amp;quot;:&amp;quot;account 2&amp;quot;},&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2/bottles/201&amp;quot;,&amp;quot;id&amp;quot;:201,&amp;quot;links&amp;quot;:{&amp;quot;account&amp;quot;:{&amp;quot;href&amp;quot;:&amp;quot;/cellar/accounts/2&amp;quot;,&amp;quot;id&amp;quot;:2}},&amp;quot;name&amp;quot;:&amp;quot;Wild Horse&amp;quot;,&amp;quot;rating&amp;quot;:4,&amp;quot;varietal&amp;quot;:&amp;quot;Pinot Noir&amp;quot;,&amp;quot;vineyard&amp;quot;:&amp;quot;Wild Horse&amp;quot;,&amp;quot;vintage&amp;quot;:2010} しかし、この方法では必要となるリクエストの数が10と多い。</description>
+      <description>はじめに Goでweb APIを作る際にはgoaが便利だが、デザイン時にひと工夫することでAPIの柔軟性が増す。ここではgoaの例としてしばしば</description>
     </item>
     
     <item>
@@ -107,13 +80,7 @@ $ curl http://localhost:8081/cellar/accounts [{&amp;quot;href&amp;quot;:&amp;quo
       <pubDate>Sun, 27 Aug 2017 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/html-template-boilerplate/</guid>
-      <description>やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して共通化したい。
-やりかた あらかじめ、初期化時にすべてのテンプレートをパースしておく。このとき、ボイラープレート中で &amp;quot;content&amp;quot; を未定義としておき、コンテンツでも定義しないでおく。レンダリング時、コンテンツ毎に &amp;quot;content&amp;quot; をそのコンテンツのパース済みのテンプレートへの別名として定義しレンダリングする。
-具体例 ボイラープレートを layout.html 、異なる２つのコンテンツとして foo.html と bar.html を使った例を考える。
-foo.html と bar.html は個別のコンテンツを含むが、 &amp;lt;html&amp;gt; や &amp;lt;body&amp;gt; といったボイラープレートが無い不完全なテンプレートであり、一方 layout.html は &amp;quot;content&amp;quot; が未定義なのでこのままではレンダリングできないテンプレートである。
-これら３つのテンプレートを含む *template.Template をクローンし、 &amp;quot;content&amp;quot; を foo.html または bar.html の *parse.Tree に紐付けることで、ボイラープレートを使ったテンプレートが得られる。
-https://play.golang.org/p/yLlFoOe2ET
-package main import ( &amp;#34;html/template&amp;#34; &amp;#34;os&amp;#34; ) // 実際には `var ts = template.Must(template.ParseGlob(&amp;#34;./views/*.html&amp;#34;))` とかでやりそう var ts *template.Template func init() { ts = template.Must(template.New(&amp;#34;layout.html&amp;#34;).Parse(` &amp;lt;html&amp;gt; &amp;lt;body&amp;gt; {{ template &amp;#34;content&amp;#34; .</description>
+      <description>やりたいこと Goでwebアプリを書く際にサーバサイドで html/template を使って複数のコンテンツをHTMLにレンダリングするが、ボイラープレートを抜き出して</description>
     </item>
     
     <item>
@@ -122,14 +89,7 @@ package main import ( &amp;#34;html/template&amp;#34; &amp;#34;os&amp;#34; ) // 
       <pubDate>Fri, 23 Jun 2017 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/when-does-a-reverse-proxy-cache/</guid>
-      <description>メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリバース・プロキシを書いたので解説してみる。
-リバース・プロキシのキャッシュの挙動について考えるとき、以下の２点を切り離して考える必要がある：
- どのようなリクエスト／レスポンスのときにキャッシュするか？ どのようなリクエストのときにキャッシュから返すか？  メルカリのケースでは、そもそもキャッシュして欲しくない情報がキャッシュされ、かつそれがユーザへのレスポンスとして使われたという問題なので、ここでは前者の「どのようなリクエスト／レスポンスのときにキャッシュするか？」について考える。
-リバース・プロキシはどのようなリクエスト／レスポンスのときにキャッシュするのか？ RFC7234的には以下のすべての条件を満たすときにキャッシュするかもしれない。
- キャッシュ可能なメソッドある キャッシュ可能なステータスコードである リクエストヘッダのCache-Controlにno-storeがない レスポンスヘッダのCache-Controlにno-storeやprivateがない リクエストヘッダにAuthorizationがない 以下のいずれかを満たす  レスポンスヘッダにExpiresがある、または レスポンスヘッダのCache-Controlにmax-ageがある、または レスポンスヘッダのCache-Controlにs-maxageがある、または レスポンスヘッダのCache-ControlにおいてCache Control Extensionsでキャッシュ可能だと指定されている、または キャッシュ可能だと定義されているステータス・コード、または レスポンスヘッダのCache-Controlにpublicがある    メルカリのケースではレスポンス・ヘッダに以下を指定していた。
-Cache-Control: no-cache Expires: Thu, 22 Jun 2017 08:58:21 GMT (アクセスの1秒前の時間) 上に書いたキャッシュの条件で、Cache-Control: no-cacheは出てこない。RFC7234では、no-cacheはキャッシュされたレスポンスを使わないように指定するものだと書いてある。つまり、「どのようなリクエストのときにキャッシュから返すか？」の話だ。
-意外なことに、古い日付のExpiresがあることはキャッシュされる原因になりうる。なぜなら、リバース・プロキシはアプリケーション・サーバ等の上流のサーバが反応しないときに、古い内容であると分かっていながらキャッシュからレスポンスを返すことがあるからだ。
-では、どうすればキャッシュされなくなるか？上に書いたキャッシュの条件に当てはまらなくなればいい。具体的にはレスポンスヘッダにCache-Control: privateでよい。</description>
+      <description>メルカリでCDNのキャッシュに由来する情報流出があった。CDNでキャッシュしているのはリバース・プロキシで、ちょっと前にGoの練習を兼ねてリ</description>
     </item>
     
     <item>
@@ -149,10 +109,7 @@ Their app has a feature to show movie details with actors appeared in it.</descr
       <pubDate>Sat, 10 Dec 2016 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/line-editor-in-go/</guid>
-      <description>日本語版はこちら
-Introduction It&amp;rsquo;s easy to write an SSH server in Go. In most cases, your SSH server deals with command line inputs from users. Then, you&amp;rsquo;ll need a piece of software called a line editor which converts key strokes into string. In Go, it&amp;rsquo;s golang.org/x/crypto/ssh/terminal.
-Write an SSH Server Let&amp;rsquo;s write an SSH server. You&amp;rsquo;ll need golang.org/x/crypto/ssh to write an SSH server in Go.
-For example, we&amp;rsquo;ll consider a simple case which echoes back your input lines.</description>
+      <description>日本語版はこちら Introduction It&amp;rsquo;s easy to write an SSH server in Go. In most cases, your SSH server deals with command line inputs from users. Then, you&amp;rsquo;ll need a piece of software called a line editor which converts key strokes into string. In Go, it&amp;rsquo;s golang.org/x/crypto/ssh/terminal. Write an SSH Server Let&amp;rsquo;s write an SSH server. You&amp;rsquo;ll need golang.org/x/crypto/ssh to write an SSH server in</description>
     </item>
     
     <item>
@@ -161,10 +118,7 @@ For example, we&amp;rsquo;ll consider a simple case which echoes back your input
       <pubDate>Thu, 01 Dec 2016 00:00:00 +0000</pubDate>
       
       <guid>https://y1ban.com/line-editor-in-go-ja/</guid>
-      <description>はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。その場合、キー入力の列を文字列に変換するラインエディタと呼ばれるものが必要になります。Goではgolang.org/x/crypto/ssh/terminalがそれです。
-SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを書くにはgolang.org/x/crypto/sshを使います。
-ここでは例として入力行を送り返すだけの単純なSSHサーバを考えます。120行ほどあるので、読み飛ばしてもらってかまいません。重要なポイントは以下の3点だけです。
- プロンプトを表示する w.WriteString(prompt) ユーザの入力行を受け取る l, _, err := r.ReadLine() 入力行を送り返す w.WriteString(&amp;quot;\r\nYou&#39;ve typed: &amp;quot; + string(l) + &amp;quot;\n&amp;quot;)  package main import ( &amp;#34;bufio&amp;#34; &amp;#34;fmt&amp;#34; &amp;#34;io/ioutil&amp;#34; &amp;#34;log&amp;#34; &amp;#34;net&amp;#34; &amp;#34;os/exec&amp;#34; &amp;#34;golang.org/x/crypto/ssh&amp;#34; ) func main() { key, err := privateKey() if err != nil { log.Fatalf(&amp;#34;failed to load private key: %v&amp;#34;, err) } config := &amp;amp;ssh.ServerConfig{NoClientAuth: true} config.AddHostKey(key) listener, err := net.Listen(&amp;#34;tcp&amp;#34;, &amp;#34;0.0.0.0:2022&amp;#34;) if err != nil { log.</description>
+      <description>はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。そ</description>
     </item>
     
     <item>

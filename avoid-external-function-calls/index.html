@@ -25,18 +25,10 @@
 
 
 <title>Goで別パッケージの関数呼び出しは禁止すべき | y1ban.com</title>
-<meta name="description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。
-別パッケージの関数呼び出し 以下のプログラムで main をどうやってテストすればいいだろうか？例えば当日のお昼12:00に0日前だと表示されるケースをどう書けるだろうか。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var date = must(time.Parse(time.RFC3339, &#34;2019-12-20T00:00:00&#43;09:00&#34;)) func main() { d := date.Sub(time.Now()).Hours() / 24 fmt.Printf(&#34;『スター・ウォーズ／スカイウォーカーの夜明け』まであと%d日\n&#34;, int(d)) } func must(t time.Time, err error) time.Time { if err != nil { panic(err) } return t } この例のように、 time.Now や fmt.Printf のような別パッケージの関数の呼び出しがあるとテストできない12。テストできないので、別パッケージの関数呼び出しは禁止すべき。
-関数の変数を経由した呼び出し 一方、別パッケージの関数を変数に代入した場合、呼び出される関数はテスト時に置き換えることができる。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Parse timeDurationHours = time.Duration.Hours timeTimeSub = time.">
+<meta name="description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。 別">
 <meta property="og:title" content="Goで別パッケージの関数呼び出しは禁止すべき | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。
-別パッケージの関数呼び出し 以下のプログラムで main をどうやってテストすればいいだろうか？例えば当日のお昼12:00に0日前だと表示されるケースをどう書けるだろうか。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var date = must(time.Parse(time.RFC3339, &#34;2019-12-20T00:00:00&#43;09:00&#34;)) func main() { d := date.Sub(time.Now()).Hours() / 24 fmt.Printf(&#34;『スター・ウォーズ／スカイウォーカーの夜明け』まであと%d日\n&#34;, int(d)) } func must(t time.Time, err error) time.Time { if err != nil { panic(err) } return t } この例のように、 time.Now や fmt.Printf のような別パッケージの関数の呼び出しがあるとテストできない12。テストできないので、別パッケージの関数呼び出しは禁止すべき。
-関数の変数を経由した呼び出し 一方、別パッケージの関数を変数に代入した場合、呼び出される関数はテスト時に置き換えることができる。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Parse timeDurationHours = time.Duration.Hours timeTimeSub = time.">
+<meta property="og:description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。 別">
 <meta property="og:url" content="https://y1ban.com/avoid-external-function-calls/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -49,11 +41,7 @@ package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Pars
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。
-別パッケージの関数呼び出し 以下のプログラムで main をどうやってテストすればいいだろうか？例えば当日のお昼12:00に0日前だと表示されるケースをどう書けるだろうか。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var date = must(time.Parse(time.RFC3339, &#34;2019-12-20T00:00:00&#43;09:00&#34;)) func main() { d := date.Sub(time.Now()).Hours() / 24 fmt.Printf(&#34;『スター・ウォーズ／スカイウォーカーの夜明け』まであと%d日\n&#34;, int(d)) } func must(t time.Time, err error) time.Time { if err != nil { panic(err) } return t } この例のように、 time.Now や fmt.Printf のような別パッケージの関数の呼び出しがあるとテストできない12。テストできないので、別パッケージの関数呼び出しは禁止すべき。
-関数の変数を経由した呼び出し 一方、別パッケージの関数を変数に代入した場合、呼び出される関数はテスト時に置き換えることができる。
-package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Parse timeDurationHours = time.Duration.Hours timeTimeSub = time.">
+	<meta name="twitter:description" content="はじめに Goのテストにおいて、別パッケージの関数呼び出しが問題となることを示し、その回避策とそれを徹底するための静的解析ツールを紹介する。 別">
 <meta name="twitter:image" content="https://y1ban.com/avoid-external-function-calls/leone-venter-mTkXSSScrzw-unsplash.jpg">
 <meta property="article:published_time" content="2019-12-11T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2019-12-11T00:00:00&#43;00:00">
@@ -151,7 +139,7 @@ package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Pars
 
 <script src="/js/collapseAuthors.js"></script>
                     December 11, 2019
-                    • 2 min read
+                    • 3 min read
                 </div>
             </div>
         </header>
@@ -359,7 +347,7 @@ package main import ( &#34;fmt&#34; &#34;time&#34; ) var ( timeParse = time.Pars
                                 
                             </p>
                             <div class="article-metadata">
-                                December 12, 2019 · 3 min read
+                                December 12, 2019 · 4 min read
                             </div>
                         </div>
                     </div>

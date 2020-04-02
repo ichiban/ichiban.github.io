@@ -25,16 +25,10 @@
 
 
 <title>GoでSSHサーバにラインエディタが欲しいなら golang.org/x/crypto/ssh/terminal | y1ban.com</title>
-<meta name="description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。その場合、キー入力の列を文字列に変換するラインエディタと呼ばれるものが必要になります。Goではgolang.org/x/crypto/ssh/terminalがそれです。
-SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを書くにはgolang.org/x/crypto/sshを使います。
-ここでは例として入力行を送り返すだけの単純なSSHサーバを考えます。120行ほどあるので、読み飛ばしてもらってかまいません。重要なポイントは以下の3点だけです。
- プロンプトを表示する w.WriteString(prompt) ユーザの入力行を受け取る l, _, err := r.ReadLine() 入力行を送り返す w.WriteString(&quot;\r\nYou&#39;ve typed: &quot; &#43; string(l) &#43; &quot;\n&quot;)  package main import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; &#34;net&#34; &#34;os/exec&#34; &#34;golang.org/x/crypto/ssh&#34; ) func main() { key, err := privateKey() if err != nil { log.Fatalf(&#34;failed to load private key: %v&#34;, err) } config := &amp;ssh.ServerConfig{NoClientAuth: true} config.AddHostKey(key) listener, err := net.Listen(&#34;tcp&#34;, &#34;0.0.0.0:2022&#34;) if err != nil { log.">
+<meta name="description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。そ">
 <meta property="og:title" content="GoでSSHサーバにラインエディタが欲しいなら golang.org/x/crypto/ssh/terminal | y1ban.com">
 <meta property="og:site_name" content="y1ban.com">
-<meta property="og:description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。その場合、キー入力の列を文字列に変換するラインエディタと呼ばれるものが必要になります。Goではgolang.org/x/crypto/ssh/terminalがそれです。
-SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを書くにはgolang.org/x/crypto/sshを使います。
-ここでは例として入力行を送り返すだけの単純なSSHサーバを考えます。120行ほどあるので、読み飛ばしてもらってかまいません。重要なポイントは以下の3点だけです。
- プロンプトを表示する w.WriteString(prompt) ユーザの入力行を受け取る l, _, err := r.ReadLine() 入力行を送り返す w.WriteString(&quot;\r\nYou&#39;ve typed: &quot; &#43; string(l) &#43; &quot;\n&quot;)  package main import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; &#34;net&#34; &#34;os/exec&#34; &#34;golang.org/x/crypto/ssh&#34; ) func main() { key, err := privateKey() if err != nil { log.Fatalf(&#34;failed to load private key: %v&#34;, err) } config := &amp;ssh.ServerConfig{NoClientAuth: true} config.AddHostKey(key) listener, err := net.Listen(&#34;tcp&#34;, &#34;0.0.0.0:2022&#34;) if err != nil { log.">
+<meta property="og:description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。そ">
 <meta property="og:url" content="https://y1ban.com/line-editor-in-go-ja/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="en_US">
@@ -47,10 +41,7 @@ SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを�
 	<meta name="twitter:site" content="@https://twitter.com/1ban">
 	<meta name="twitter:creator" content="@https://twitter.com/1ban">
 
-	<meta name="twitter:description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。その場合、キー入力の列を文字列に変換するラインエディタと呼ばれるものが必要になります。Goではgolang.org/x/crypto/ssh/terminalがそれです。
-SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを書くにはgolang.org/x/crypto/sshを使います。
-ここでは例として入力行を送り返すだけの単純なSSHサーバを考えます。120行ほどあるので、読み飛ばしてもらってかまいません。重要なポイントは以下の3点だけです。
- プロンプトを表示する w.WriteString(prompt) ユーザの入力行を受け取る l, _, err := r.ReadLine() 入力行を送り返す w.WriteString(&quot;\r\nYou&#39;ve typed: &quot; &#43; string(l) &#43; &quot;\n&quot;)  package main import ( &#34;bufio&#34; &#34;fmt&#34; &#34;io/ioutil&#34; &#34;log&#34; &#34;net&#34; &#34;os/exec&#34; &#34;golang.org/x/crypto/ssh&#34; ) func main() { key, err := privateKey() if err != nil { log.Fatalf(&#34;failed to load private key: %v&#34;, err) } config := &amp;ssh.ServerConfig{NoClientAuth: true} config.AddHostKey(key) listener, err := net.Listen(&#34;tcp&#34;, &#34;0.0.0.0:2022&#34;) if err != nil { log.">
+	<meta name="twitter:description" content="はじめに GoはSSHサーバを書くのもかんたんです。ほとんどの場合、あなたのSSHサーバはユーザからのコマンド入力を受け付けるものでしょう。そ">
 <meta name="twitter:image" content="https://y1ban.com/line-editor-in-go-ja/rafaela-biazi-2N1lJCLrCj0-unsplash.jpg">
 <meta property="article:published_time" content="2016-12-01T00:00:00&#43;00:00">
 	<meta property="article:updated_time" content="2016-12-01T00:00:00&#43;00:00">
@@ -148,7 +139,7 @@ SSHサーバを書く SSHサーバを書きましょう。GoでSSHサーバを�
 
 <script src="/js/collapseAuthors.js"></script>
                     December 1, 2016
-                    • 4 min read
+                    • 5 min read
                 </div>
             </div>
         </header>
