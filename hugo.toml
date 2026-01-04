@@ -1,0 +1,29 @@
+baseURL = 'https://y1ban.com/'
+languageCode = 'en-us'
+title = 'y1ban.com'
+theme = 'paper'
+
+[params]
+  # color style
+  color = 'linen'                           # linen, wheat, gray, light
+
+  # header social icons
+  twitter = '1ban'               # twitter.com/YOUR_TWITTER_ID
+  github = 'ichiban'                 # github.com/YOUR_GITHUB_ID
+  instagram = 'ichibany'           # instagram.com/YOUR_INSTAGRAM_ID
+  linkedin = 'yutakaichibangase'             # linkedin.com/in/YOUR_LINKEDIN_ID
+  rss = true                                # show rss icon
+
+  # home page profile
+  avatar = 'yichiban@gmail.com'                 # gravatar email or image url
+  name = 'Yutaka Ichibangase'
+  bio = """
+  I'm a software developer based in Tokyo, Japan."""
+
+  # misc
+  monoDarkIcon = true                       # show monochrome dark mode icon
+  math = true                               # enable KaTeX math typesetting globally
+
+[caches]
+  [caches.images]
+    dir = ':cacheDir/images'
