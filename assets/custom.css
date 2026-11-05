@@ -1,0 +1,4 @@
+.prose :where(code)::before,
+.prose :where(code)::after {
+  content: none;
+}
